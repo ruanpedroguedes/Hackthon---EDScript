@@ -9,11 +9,11 @@ interface LigaCardProps {
 export function LigaCard({ name, imageSource }: LigaCardProps) {
   return (
     <View className="items-center w-[30%] mb-4">
-      <View className="w-16 h-16 bg-white rounded-full items-center justify-center overflow-hidden mb-2">
+      <View className="w-16 h-16 bg-[#1c1c4c] rounded-full items-center justify-center overflow-hidden mb-2">
          {imageSource ? (
-           <Image source={imageSource} className="w-10 h-10" resizeMode="contain" />
+           <Image source={imageSource} className="w-12 h-12" resizeMode="contain" />
          ) : (
-           <Text className="text-[#0B0F2A] font-bold text-lg">{name.substring(0, 2).toUpperCase()}</Text>
+           <Text className="text-white font-bold text-lg">{name.substring(0, 2).toUpperCase()}</Text>
          )}
       </View>
       <Text className="text-white text-xs text-center font-medium leading-tight">{name}</Text>
