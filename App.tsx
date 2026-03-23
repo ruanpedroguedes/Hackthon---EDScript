@@ -7,24 +7,25 @@ import { Button } from './src/components/Button';
 
 // Dados para a lista de ligas
 const ligas = [
-  { id: '1', name: 'Brasileirão' },
-  { id: '2', name: 'Libertadores' },
-  { id: '3', name: 'Champions League' },
-  { id: '4', name: 'Série A Itália' },
-  { id: '5', name: 'Europa League' },
-  { id: '6', name: 'Conference League' },
-  { id: '7', name: 'Premier League' },
-  { id: '8', name: '1ª Liga de Portugal' },
-  { id: '9', name: 'La Liga' },
-  { id: '10', name: 'Bundesliga' },
-  { id: '11', name: 'Ligue 1' },
-  { id: '12', name: 'Copa do Rei' },
+  { id: '1', name: 'Brasileirão', image: require('./assets/soccer/brasileirao.png') },
+  { id: '2', name: 'Libertadores', image: require('./assets/soccer/libertadores.png') },
+  { id: '3', name: 'Champions League', image: require('./assets/soccer/champions.png') },
+  { id: '4', name: 'Série A Itália', image: require('./assets/soccer/serieA.png') },
+  { id: '5', name: 'Europa League', image: require('./assets/soccer/europa_league_no_bg 1.png') },
+  { id: '6', name: 'Conference League', image: require('./assets/soccer/conferenceleague.png') },
+  { id: '7', name: 'Premier League', image: require('./assets/soccer/premirerleague.png') },
+  { id: '8', name: '1ª Liga de Portugal', image: require('./assets/soccer/1ligadeportugal.png') },
+  { id: '9', name: 'La Liga', image: require('./assets/soccer/laliga.png') },
+  { id: '10', name: 'Bundesliga', image: require('./assets/soccer/bundesliga.png') },
+  { id: '11', name: 'Ligue 1', image: require('./assets/soccer/ligue1.png') },
+  { id: '12', name: 'Copa do Rei', image: require('./assets/soccer/copadorei.png') },
 ];
 
+
 const outrosEsportes = [
-  { id: '1', name: 'Basquete' },
-  { id: '2', name: 'Vôlei' },
-  { id: '3', name: 'Tênis' },
+  { id: '1', name: 'Basquete', image: require('./assets/soccer/basquete.png') },
+  { id: '2', name: 'Vôlei', image: require('./assets/soccer/volei.png') },
+  { id: '3', name: 'Tênis', image: require('./assets/soccer/tenis.png') },
 ];
 
 export default function App() {
@@ -58,7 +59,7 @@ export default function App() {
         <Section title="Futebol">
           <View className="flex-row flex-wrap justify-between w-full">
             {ligas.map(liga => (
-              <LigaCard key={liga.id} name={liga.name} />
+              <LigaCard key={liga.id} name={liga.name} imageSource={(liga as any).image} />
             ))}
           </View>
         </Section>
@@ -67,7 +68,7 @@ export default function App() {
         <Section title="Você também pode gostar">
           <View className="flex-row justify-between w-full">
             {outrosEsportes.map(esporte => (
-              <LigaCard key={esporte.id} name={esporte.name} />
+              <LigaCard key={esporte.id} name={esporte.name} imageSource={(esporte as any).image} />
             ))}
           </View>
         </Section>
