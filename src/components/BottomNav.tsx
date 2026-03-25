@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 interface BottomNavProps {
@@ -26,9 +26,12 @@ export function BottomNav({ activeTab, setActiveTab }: BottomNavProps) {
         </Text>
       </Pressable>
 
-      <View className="items-center justify-center w-16 h-16 rounded-full bg-slate-200 -mt-10 border-4 border-[#0B0F2A] shadow-lg">
-        <Text className="text-3xl font-extrabold text-[#0B8226] italic">E</Text>
-      </View>
+      <Pressable 
+        onPress={() => setActiveTab('Home')}
+        className={`items-center justify-center w-16 h-16 rounded-full bg-slate-200 -mt-10 border-4 shadow-lg overflow-hidden ${activeTab === 'Home' ? 'border-[#17C900]' : 'border-[#0B0F2A]'}`}
+      >
+        <Image source={require('../../assets/logos/eds_e.png')} className="w-10 h-10" resizeMode="contain" />
+      </Pressable>
 
       <Pressable onPress={() => setActiveTab('Populares')} className="items-center w-16 relative">
         {activeTab === 'Populares' && <View className="absolute -top-3 w-10 h-1 bg-green-500 rounded-b-md" />}
