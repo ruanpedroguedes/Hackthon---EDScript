@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, ScrollView, Pressable, StatusBar, SafeAreaView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, Pressable, StatusBar, SafeAreaView, Image } from 'react-native';
 import { LigaCard } from '../components/LigaCard';
 import { Section } from '../components/Section';
 import { Button } from '../components/Button';
@@ -20,15 +20,23 @@ const ligas = [
 ];
 
 const outrosEsportes = [
-  { id: '1', name: 'Basquete', image: require('../../assets/soccer/basquete.png') },
-  { id: '2', name: 'Vôlei', image: require('../../assets/soccer/volei.png') },
-  { id: '3', name: 'Tênis', image: require('../../assets/soccer/tenis.png') },
+  { id: 'esporte_1', name: 'Basquete', image: require('../../assets/soccer/basquete.png') },
+  { id: 'esporte_2', name: 'Vôlei', image: require('../../assets/soccer/volei.png') },
+  { id: 'esporte_3', name: 'Tênis', image: require('../../assets/soccer/tenis.png') },
 ];
 
 export function ChoiceScreen({ onComplete }: { onComplete?: () => void }) {
+  const [selectedLigas, setSelectedLigas] = useState<string[]>([]);
+
+  const toggleLiga = (id: string) => {
+    setSelectedLigas(prev => 
+      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+    );
+  };
+
   return (
-    <View className="flex-1 bg-[#0B0F2A] pt-12">
-      <StatusBar barStyle="light-content" backgroundColor="#0B0F2A" />
+    <View className="flex-1 bg-[#02023D] pt-12">
+      <StatusBar barStyle="light-content" backgroundColor="#02023D" />
       <ScrollView
         className="flex-1"
         contentContainerStyle={{ paddingBottom: 60, paddingTop: 20, alignItems: 'center' }}
@@ -36,9 +44,7 @@ export function ChoiceScreen({ onComplete }: { onComplete?: () => void }) {
       >
 
         <View className="mb-10 items-center">
-          <Text className="text-white font-semibold text-2xl tracking-tighter">
-            <Text className="text-green-500 font-extrabold italic">ES</Text>portes da Sorte
-          </Text>
+          <Image source={require('../../assets/logos/logo_eds_deitada.png')} className="w-48 h-10" resizeMode="contain" />
         </View>
 
         <View className="px-6 items-center mb-8 w-full">
@@ -53,7 +59,13 @@ export function ChoiceScreen({ onComplete }: { onComplete?: () => void }) {
         <Section title="Futebol">
           <View className="flex-row flex-wrap justify-between w-full">
             {ligas.map(liga => (
-              <LigaCard key={liga.id} name={liga.name} imageSource={(liga as any).image} />
+              <LigaCard 
+                key={liga.id} 
+                name={liga.name} 
+                imageSource={liga.image} 
+                isSelected={selectedLigas.includes(liga.id)}
+                onPress={() => toggleLiga(liga.id)}
+              />
             ))}
           </View>
         </Section>
@@ -61,7 +73,13 @@ export function ChoiceScreen({ onComplete }: { onComplete?: () => void }) {
         <Section title="Você também pode gostar">
           <View className="flex-row justify-between w-full">
             {outrosEsportes.map(esporte => (
-              <LigaCard key={esporte.id} name={esporte.name} imageSource={(esporte as any).image} />
+              <LigaCard 
+                key={esporte.id} 
+                name={esporte.name} 
+                imageSource={esporte.image} 
+                isSelected={selectedLigas.includes(esporte.id)}
+                onPress={() => toggleLiga(esporte.id)}
+              />
             ))}
           </View>
         </Section>

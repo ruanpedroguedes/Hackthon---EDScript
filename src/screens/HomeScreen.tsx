@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable, ScrollView } from 'react-native';
+import { View, Text, Pressable, ScrollView, Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 const categories = ['Todos os jogos', 'Últimos jogados', 'Novidades', 'Populares', 'Slots', 'Ao Vivo'];
@@ -11,9 +11,7 @@ export function HomeScreen({ onSearchClick }: { onSearchClick: () => void }) {
         <Pressable className="active:opacity-70">
           <Feather name="menu" size={28} color="white" />
         </Pressable>
-        <Text className="text-white font-semibold text-xl tracking-tighter">
-          <Text className="text-green-500 font-extrabold italic">ES</Text>portes da Sorte
-        </Text>
+        <Image source={require('../../assets/logos/logo_eds_deitada.png')} className="w-36 h-8" resizeMode="contain" />
         <View className="w-8" />
       </View>
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Pressable, SafeAreaView, StatusBar, } from 'react-native';
+import { View, Text, TextInput, Pressable, SafeAreaView, StatusBar, Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 export function LoginScreen({ onLogin }: { onLogin: () => void }) {
@@ -11,9 +11,7 @@ export function LoginScreen({ onLogin }: { onLogin: () => void }) {
       <StatusBar barStyle="light-content" backgroundColor="#0B0F2A" />
 
       <View className="items-center mb-12">
-        <Text className="text-white font-semibold text-4xl tracking-tighter">
-          <Text className="text-green-500 font-extrabold italic">ES</Text>portes
-        </Text>
+        <Image source={require('../../assets/logos/logo_eds_deitada.png')} className="w-56 h-12 mb-2" resizeMode="contain" />
         <Text className="text-gray-400 text-sm mt-2 tracking-widest uppercase">Login de Acesso</Text>
       </View>
 
