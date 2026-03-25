@@ -14,10 +14,10 @@ A solução propõe uma interface mais **leve**, **intuitiva** e **centrada no u
 
 Os principais problemas identificados foram:
 
-- ❌ Navegação pouco intuitiva  
-- ⏳ Tempo de carregamento elevado  
-- 📱 Layout não responsivo para telas menores  
-- 🔍 Dificuldade em acessar funções essenciais  
+- Navegação pouco intuitiva  
+- Tempo de carregamento elevado  
+- Layout não responsivo para telas menores  
+- Dificuldade em acessar funções essenciais  
 
 > Esses fatores prejudicam a experiência, especialmente em cenários onde rapidez é essencial.
 
@@ -27,25 +27,25 @@ Os principais problemas identificados foram:
 
 A proposta consiste em uma versão otimizada da interface mobile com foco em:
 
-- 🔽 Redução de elementos por tela  
-- 🔄 Melhor fluxo de navegação  
-- ⭐ Destaque para ações principais  
-- ⚡ Melhor performance e carregamento  
+- Redução de elementos por tela  
+- Melhor fluxo de navegação  
+- Destaque para ações principais  
+- Melhor performance e carregamento  
 
 ---
 
 ## 🧠 Features
 
-### 📱 Menu Mobile
+### Menu Mobile
 Menu inferior fixo para acesso rápido às principais funcionalidades.
 
-### ⚡ Performance
+### Performance
 Carregamento otimizado com priorização do conteúdo visível.
 
-### 🧭 Navegação
+### Navegação
 Fluxo simplificado e mais intuitivo.
 
-### 🎯 Ações em Destaque
+### Ações em Destaque
 Botões como **Apostar** e **Entrar** mais visíveis.
 
 ---
@@ -62,10 +62,10 @@ Botões como **Apostar** e **Entrar** mais visíveis.
 
 ## 📊 Impacto Esperado
 
-- 📉 Menor tempo para realizar apostas  
-- 📈 Maior retenção de usuários  
-- 💡 Melhor experiência mobile  
-- 💰 Aumento de conversão  
+- Menor tempo para realizar apostas  
+- Maior retenção de usuários  
+- Melhor experiência mobile  
+- Aumento de conversão  
 
 ---
 
