@@ -1,67 +1,80 @@
-.EDScript_ — Melhoria da Experiência Mobile
+# Hackathon EDScript — Melhoria da Experiência Mobile
 
-📌 Visão Geral
-Este projeto foi desenvolvido durante um hackathon com o objetivo de melhorar a experiência mobile do site Esportes da Sorte.
-Durante a análise inicial, percebemos que a navegação em dispositivos móveis apresentava alguns pontos de fricção que impactavam diretamente a usabilidade e a conversão. A partir disso, propusemos uma versão mais leve, intuitiva e focada no usuário.
+---
 
-🎯 Problema
-Ao testar a plataforma em dispositivos móveis, identificamos alguns problemas principais:
-Navegação pouco intuitiva, com excesso de etapas
-Tempo de carregamento elevado em algumas telas
-Layout pouco adaptado para telas menores
-Dificuldade em acessar rapidamente funções importantes, como apostas e login
-Esses fatores acabam impactando negativamente a experiência do usuário, especialmente em um contexto onde agilidade é essencial.
+## 📌 Visão Geral
+Este projeto foi desenvolvido durante um hackathon com o objetivo de melhorar a experiência mobile do site **Esportes da Sorte**.
 
-💡 Solução
-Nossa proposta foi criar uma versão otimizada da interface mobile, com foco em simplificação e performance.
+Durante a análise inicial, identificamos pontos de fricção na navegação mobile que impactavam diretamente a **usabilidade** e a **conversão**.  
+A solução propõe uma interface mais **leve**, **intuitiva** e **centrada no usuário**.
 
-As principais decisões foram:
-Reduzir a quantidade de elementos por tela
-Reorganizar o fluxo de navegação
-Destacar ações principais
-Otimizar o carregamento de componentes e assets
+---
 
-🧠 Principais Features
-📱 Menu mobile redesenhado
-Criamos um menu inferior fixo com acesso direto às principais seções, reduzindo o número de cliques.
+## 🎯 Problema
 
-⚡ Melhoria de performance
-Otimizamos o carregamento inicial removendo elementos desnecessários e priorizando conteúdo visível.
+Os principais problemas identificados foram:
 
-🧭 Navegação simplificada
-Reorganizamos a estrutura para que o usuário encontre o que precisa mais rapidamente.
+- ❌ Navegação pouco intuitiva  
+- ⏳ Tempo de carregamento elevado  
+- 📱 Layout não responsivo para telas menores  
+- 🔍 Dificuldade em acessar funções essenciais  
 
-🎯 Destaque para ações importantes
-Botões de ação como “Apostar” e “Entrar” ganharam mais visibilidade.
+> Esses fatores prejudicam a experiência, especialmente em cenários onde rapidez é essencial.
 
+---
 
-🛠️ Tecnologias Utilizadas
-React Native
-TypeScript
-JavaScript
-Expo Go
-NativeWind (Tailwind CSS para React Native)
+## 💡 Solução
 
+A proposta consiste em uma versão otimizada da interface mobile com foco em:
 
+- 🔽 Redução de elementos por tela  
+- 🔄 Melhor fluxo de navegação  
+- ⭐ Destaque para ações principais  
+- ⚡ Melhor performance e carregamento  
 
-📸 Processo de desenvolvimento
-![Tela inicial](registro/home.png)
-![Tela de login](registro/login.png)
+---
 
+## 🧠 Features
 
-📊 Impacto Esperado
-Com essas melhorias, esperamos:
-Redução no tempo de navegação até realizar uma aposta
-Melhor retenção de usuários mobile
-Experiência mais fluida e intuitiva
-Aumento na taxa de conversão
+### 📱 Menu Mobile
+Menu inferior fixo para acesso rápido às principais funcionalidades.
 
+### ⚡ Performance
+Carregamento otimizado com priorização do conteúdo visível.
 
-👥 Equipe
-- Caio Esdras de Macêdo Silva
-- Clarice Araujo Soares Couto
-- Emily Cristiane Mesquita de Almeida
-- João Vitor de Melo Noya Souza
-- Larissa Azevedo Marques Cavalcanti de Albuquerque
-- Ruan Pedro Pereira Guedes
-- Yasmin Lopes Mendes
+### 🧭 Navegação
+Fluxo simplificado e mais intuitivo.
+
+### 🎯 Ações em Destaque
+Botões como **Apostar** e **Entrar** mais visíveis.
+
+---
+
+## 🛠️ Tecnologias
+
+- React Native  
+- TypeScript  
+- JavaScript  
+- Expo Go  
+- NativeWind
+  
+---
+
+## 📊 Impacto Esperado
+
+- 📉 Menor tempo para realizar apostas  
+- 📈 Maior retenção de usuários  
+- 💡 Melhor experiência mobile  
+- 💰 Aumento de conversão  
+
+---
+
+## 👥 Equipe
+
+- Caio Esdras de Macêdo Silva  
+- Clarice Araujo Soares Couto  
+- Emily Cristiane Mesquita de Almeida  
+- João Vitor de Melo Noya Souza  
+- Larissa Azevedo Marques Cavalcanti de Albuquerque  
+- Ruan Pedro Pereira Guedes  
+- Yasmin Lopes Mendes  
