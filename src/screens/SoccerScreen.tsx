@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TextInput, Pressable, Alert } from 'react-native';
+import { View, Text, ScrollView, TextInput, Pressable, Alert, Image } from 'react-native';
 import { Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const matches = [
@@ -28,9 +28,7 @@ export function SoccerScreen({ onBack }: { onBack: () => void }) {
       <View className="px-4 pt-2 pb-4 bg-[#090B22]">
         <View className="flex-row items-center justify-between mt-2">
           <Feather name="menu" size={28} color="white" />
-          <Text className="text-white font-semibold text-xl tracking-tighter">
-            <Text className="text-green-500 font-extrabold italic">ES</Text>portes da Sorte
-          </Text>
+          <Image source={require('../../assets/logos/logo_eds_deitada.png')} className="w-36 h-8" resizeMode="contain" />
           <View className="w-8" />
         </View>
         <View className="mt-4">
