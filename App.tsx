@@ -9,12 +9,18 @@ import { SoccerScreen } from './src/screens/SoccerScreen';
 import { PopularesScreen } from './src/screens/PopularesScreen';
 import { SuporteScreen } from './src/screens/SuporteScreen';
 import { BottomNav } from './src/components/BottomNav';
+import { HomePreviewScreen } from './src/screens/HomePreviewScreen';
 
 export default function App() {
+  const [showPreview, setShowPreview] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [hasChosen, setHasChosen] = useState(false);
   const [activeTab, setActiveTab] = useState('Cassino'); 
   const [homeScreen, setHomeScreen] = useState('Home');
+
+  if (showPreview) {
+    return <HomePreviewScreen onLoginClick={() => setShowPreview(false)} />;
+  }
 
   if (!isLoggedIn) {
     return <LoginScreen onLogin={() => setIsLoggedIn(true)} />;

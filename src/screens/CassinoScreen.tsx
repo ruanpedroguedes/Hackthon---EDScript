@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, ScrollView, TextInput, Pressable, Alert, Animated } from 'react-native';
+import { View, Text, ScrollView, TextInput, Pressable, Alert, Animated, Image } from 'react-native';
 import { Feather, Ionicons } from '@expo/vector-icons';
 
 const games = [
@@ -52,9 +52,7 @@ export function CassinoScreen({ onBack }: { onBack?: () => void }) {
           <Pressable onPress={onBack || (() => Alert.alert('Menu', 'Abrir menu lateral'))} className="active:opacity-70">
             <Feather name={onBack ? "chevron-left" : "menu"} size={28} color="white" />
           </Pressable>
-          <Text className="text-white font-semibold text-xl tracking-tighter">
-            <Text className="text-green-500 font-extrabold italic">ES</Text>portes da Sorte
-          </Text>
+          <Image source={require('../../assets/logos/logo_eds_deitada.png')} className="w-36 h-8" resizeMode="contain" />
           <View className="w-8" />
         </View>
 
