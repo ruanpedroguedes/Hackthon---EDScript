@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Pressable, Image, StatusBar, Dimensions, FlatList, NativeScrollEvent, NativeSyntheticEvent, ScrollView, Animated } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Video, ResizeMode } from 'expo-av';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { BottomNav } from '../components/BottomNav';
+import { FullReelsScreen } from './FullReelsScreen';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = width * 0.85;
@@ -16,12 +18,9 @@ const carouselItems = [
 ];
 
 const gamesItems = [
-  { id: '1', img: require('../../assets/carrosel/1.png') },
-  { id: '2', img: require('../../assets/carrosel/2.png') },
-  { id: '3', img: require('../../assets/carrosel/3.png') },
-  { id: '4', img: require('../../assets/carrosel/4.png') },
-  { id: '5', img: require('../../assets/carrosel/5.png') },
-  { id: '6', img: require('../../assets/carrosel/6.png') },
+  { id: '1', img: require('../../assets/carrosel/banner_home.png') },
+  { id: '2', img: require('../../assets/carrosel/ods_turbo.png') },
+  { id: '3', img: require('../../assets/carrosel/jogo_fla.png') },
 ];
 
 const oddsItems = [
@@ -52,6 +51,7 @@ export function HomePreviewScreen({ onLoginClick }: { onLoginClick: () => void }
   const oddsListRef = useRef<FlatList>(null);
   const scrollX = useRef(new Animated.Value(START_INDEX * FULL_CARD_WIDTH)).current;
   const [oddsIndex, setOddsIndex] = useState(START_INDEX);
+  const [showReels, setShowReels] = useState(false);
 
   // Top Carousel Timer
   useEffect(() => {
@@ -75,7 +75,7 @@ export function HomePreviewScreen({ onLoginClick }: { onLoginClick: () => void }
       }
       setGamesIndex(nextIndex);
       gamesListRef.current?.scrollToIndex({ index: nextIndex, animated: true });
-    }, 8000);
+    }, 4000);
     return () => clearInterval(interval);
   }, [gamesIndex]);
 
@@ -119,95 +119,113 @@ export function HomePreviewScreen({ onLoginClick }: { onLoginClick: () => void }
     });
   }
 
+  if (showReels) {
+    return <FullReelsScreen onClose={() => setShowReels(false)} />;
+  }
+
   return (
     <View className="flex-1 bg-[#02023D] pt-12">
       <StatusBar barStyle="light-content" backgroundColor="#02023D" />
 
-      {/* Header */}
-      <View className="flex-row items-center justify-between px-4 py-2 mt-2">
-        <Pressable className="active:opacity-70 p-1 -ml-1">
-          <Feather name="menu" size={32} color="white" />
+      {/* Header (Menu, Logo, Entrar) */}
+      <View className="flex-row items-center justify-between px-4 py-3">
+        <Pressable className="active:opacity-70">
+          <Feather name="menu" size={28} color="white" />
         </Pressable>
 
         <Image
           source={require('../../assets/logos/logo_eds_deitada.png')}
-          className="w-40 h-8"
+          className="w-32 h-8"
           resizeMode="contain"
         />
 
         <Pressable
-          className="bg-white px-4 py-2 rounded-[14px] active:opacity-80"
+          className="bg-white px-4 py-1.5 rounded-[20px] active:opacity-80"
           onPress={() => onLoginClick()}
         >
-          <Text className="text-[#242424] font-bold text-[15px]">Entrar</Text>
+          <Text className="text-[#242424] font-bold text-[13px]">Entrar</Text>
         </Pressable>
+      </View>
+
+      {/* Search Bar */}
+      <View className="px-4 mt-2">
+        <View className="flex-row items-center border border-white/30 rounded-[20px] px-4 py-2.5 bg-white/5">
+          <Feather name="search" size={20} color="white" />
+          <Text className="text-white/60 ml-3 text-sm">Pesquisa</Text>
+        </View>
       </View>
 
       <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
 
-        {/* Search Bar */}
-        <View className="px-5 mt-6">
-          <View className="flex-row items-center border border-white rounded-[20px] px-4 py-3 bg-[#02023D]">
-            <Feather name="search" size={22} color="white" />
-            <Text className="text-white ml-3 text-base">Pesquisa</Text>
-          </View>
-        </View>
+        {/* Hero Section: Reels + Carousel */}
+        <View className="flex-row px-4 mt-6 h-[200px]">
+          {/* Left: Reel Card */}
+          <Pressable 
+            className="w-[30%] h-full bg-black rounded-[20px] items-center justify-center border border-white/20 mr-3 overflow-hidden"
+            onPress={() => setShowReels(true)}
+          >
+            <Video
+              source={require('../../assets/videos/neiff.mp4')}
+              style={{ width: '100%', height: '100%', position: 'absolute' }}
+              resizeMode={ResizeMode.COVER}
+              shouldPlay
+              isLooping
+              isMuted
+            />
+            <View className="items-center z-10">
+               <Feather name="play-circle" size={32} color="white" opacity={0.6} />
+               <Text className="text-white font-bold text-[12px] mt-1 shadow-sm">Preview</Text>
+            </View>
+            <View className="absolute bottom-2 left-2 flex-row items-center z-10">
+               <View className="w-1.5 h-1.5 rounded-full bg-[#17C900] mr-1" />
+               <Text className="text-white/80 text-[8px] font-bold">AO VIVO</Text>
+            </View>
+          </Pressable>
 
-        {/* Carousel Section */}
-        <View className="mt-8">
-          <View className="relative">
+          {/* Right: Games Carousel (Smaller) */}
+          <View className="flex-1 h-full">
             <FlatList
-              ref={flatListRef}
-              data={carouselItems}
+              ref={gamesListRef}
+              data={gamesItems}
               keyExtractor={(item) => item.id}
               horizontal
               showsHorizontalScrollIndicator={false}
-              snapToInterval={ITEM_WIDTH + SPACING}
-              decelerationRate="fast"
-              onMomentumScrollEnd={handleScroll}
-              contentContainerStyle={{ paddingHorizontal: (width - ITEM_WIDTH) / 2 }}
-              getItemLayout={(data, index) => ({ length: ITEM_WIDTH + SPACING, offset: (ITEM_WIDTH + SPACING) * index, index })}
-              initialScrollIndex={1}
-              renderItem={({ item, index }) => (
-                <View style={{ width: ITEM_WIDTH, marginRight: index === carouselItems.length - 1 ? 0 : SPACING }}>
+              renderItem={({ item }) => (
+                <View style={{ width: width * 0.6, height: '100%', marginRight: 10 }}>
                   <Image
                     source={item.img}
-                    className="w-full h-[160px] rounded-[20px]"
-                    style={{ borderRadius: 20 }}
+                    className="w-full h-full rounded-[20px]"
                     resizeMode="cover"
                   />
                 </View>
               )}
             />
-
-            {/* Floating Arrows */}
-            <View className="absolute top-[40%] w-full flex-row justify-between px-0" pointerEvents="box-none">
+            
+            {/* Small Navigation Arrows for Games */}
+            <View className="absolute top-[40%] -left-2 -right-2 flex-row justify-between" pointerEvents="box-none">
               <Pressable
-                className="w-8 h-10 bg-[#17C900] items-center justify-center rounded-r-md active:opacity-70 shadow-lg"
-                onPress={() => navLeft()}
+                className="w-6 h-8 bg-[#17C900] items-center justify-center rounded-r-md active:opacity-70"
+                onPress={() => moveGames('left')}
               >
-                <Feather name="chevron-left" size={24} color="#1E1E1E" />
+                <Feather name="chevron-left" size={18} color="#1E1E1E" />
               </Pressable>
               <Pressable
-                className="w-8 h-10 bg-[#17C900] items-center justify-center rounded-l-md active:opacity-70 shadow-lg"
-                onPress={() => navRight()}
+                className="w-6 h-8 bg-[#17C900] items-center justify-center rounded-l-md active:opacity-70"
+                onPress={() => moveGames('right')}
               >
-                <Feather name="chevron-right" size={24} color="#1E1E1E" />
+                <Feather name="chevron-right" size={18} color="#1E1E1E" />
               </Pressable>
             </View>
-          </View>
 
-          {/* Dots */}
-          <View className="flex-row justify-center mt-6 items-center">
-            {carouselItems.map((_, index) => (
-              <View
-                key={index}
-                className={`rounded-full mx-1 ${activeIndex === index
-                  ? 'bg-[#17C900] w-3 h-3'
-                  : 'bg-white/30 w-2.5 h-2.5'
-                  }`}
-              />
-            ))}
+            {/* Pagination Dots for Games */}
+            <View className="flex-row justify-center mt-2">
+              {gamesItems.map((_, index) => (
+                <View
+                  key={index}
+                  className={`rounded-full mx-0.5 ${gamesIndex === index ? 'bg-[#17C900] w-1.5 h-1.5' : 'bg-white/30 w-1 h-1'}`}
+                />
+              ))}
+            </View>
           </View>
         </View>
 
