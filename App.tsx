@@ -15,7 +15,7 @@ export default function App() {
   const [showPreview, setShowPreview] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [hasChosen, setHasChosen] = useState(false);
-  const [activeTab, setActiveTab] = useState('Cassino'); 
+  const [activeTab, setActiveTab] = useState('Home'); 
   const [homeScreen, setHomeScreen] = useState('Home');
 
   if (showPreview) {
@@ -27,14 +27,19 @@ export default function App() {
   }
 
   if (!hasChosen) {
-    return <ChoiceScreen onComplete={() => setHasChosen(true)} />;
+    return (
+      <ChoiceScreen onComplete={() => {
+        setHasChosen(true);
+        setActiveTab('Home');
+      }} />
+    );
   }
 
   return (
     <View className="flex-1 bg-[#090B22] pt-12">
       <StatusBar barStyle="light-content" backgroundColor="#0B0F2A" />
       <View className="flex-1">
-        {activeTab === 'Cassino' && (
+        {activeTab === 'Home' && (
            homeScreen === 'Home' ? (
              <HomeScreen onSearchClick={() => setHomeScreen('Cassino')} />
            ) : (
@@ -42,10 +47,10 @@ export default function App() {
            )
         )}
         {activeTab === 'Esportes' && (
-          <SoccerScreen onBack={() => {
-            setActiveTab('Cassino');
-            setHomeScreen('Home');
-          }} />
+           <SoccerScreen onBack={() => {
+             setActiveTab('Cassino');
+             setHomeScreen('Home');
+           }} />
         )}
         {activeTab === 'Populares' && <PopularesScreen />}
         {activeTab === 'Suporte' && <SuporteScreen />}
