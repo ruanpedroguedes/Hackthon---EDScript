@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, ScrollView, Pressable, Image, TextInput, Modal, Dimensions } from 'react-native';
+import React, { useRef, useEffect } from 'react';
+import { View, Text, ScrollView, Pressable, Image, TextInput, Modal, Dimensions, Animated } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -12,16 +12,46 @@ interface SideMenuProps {
 }
 
 export function SideMenu({ isVisible, onClose, onTabSelect }: SideMenuProps) {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(-50)).current;
+
+  useEffect(() => {
+    if (isVisible) {
+      // Dissolver 0.4s
+      Animated.parallel([
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 400,
+          useNativeDriver: true,
+        }),
+        Animated.timing(slideAnim, {
+          toValue: 0,
+          duration: 400,
+          useNativeDriver: true,
+        })
+      ]).start();
+    } else {
+      fadeAnim.setValue(0);
+      slideAnim.setValue(-50);
+    }
+  }, [isVisible]);
+
   return (
     <Modal
       visible={isVisible}
-      animationType="slide"
+      animationType="fade"
       transparent={true}
       onRequestClose={onClose}
     >
       <View className="flex-1 flex-row">
         {/* Sidebar Content */}
-        <View className="w-[85%] bg-[#02023D] pt-12 pb-6">
+        <Animated.View 
+          className="w-[85%] bg-[#02023D] pt-12 pb-6"
+          style={{
+            opacity: fadeAnim,
+            transform: [{ translateX: slideAnim }]
+          }}
+        >
           <View className="flex-row items-center justify-between px-4 mb-6">
             <Image 
               source={require('../../assets/logos/logo_eds_deitada.png')} 
@@ -139,7 +169,7 @@ export function SideMenu({ isVisible, onClose, onTabSelect }: SideMenuProps) {
             </View>
 
           </ScrollView>
-        </View>
+        </Animated.View>
 
         {/* Backdrop to close */}
         <Pressable 
