@@ -48,26 +48,29 @@ const FULL_CARD_WIDTH = CARD_WIDTH + CARD_MARGIN * 2;
 const START_INDEX = 250; // Start in the middle of the infinite list
 
 export function HomePreviewScreen({ 
-  onLoginClick,
-  onDirectLogin,
-  onDirectRegister
+  onLoginClick = () => {},
+  onDirectLogin = () => {},
+  onDirectRegister = () => {},
+  isLoggedIn = false
 }: { 
-  onLoginClick: () => void;
-  onDirectLogin: () => void;
-  onDirectRegister: () => void;
+  onLoginClick?: () => void;
+  onDirectLogin?: () => void;
+  onDirectRegister?: () => void;
+  isLoggedIn?: boolean;
 }) {
   const [activeTab, setActiveTab] = useState('Home');
-  const [activeIndex, setActiveIndex] = useState(1);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [gamesIndex, setGamesIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
   const gamesListRef = useRef<FlatList>(null);
   const oddsListRef = useRef<FlatList>(null);
   const scrollX = useRef(new Animated.Value(START_INDEX * FULL_CARD_WIDTH)).current;
-  const [oddsIndex, setOddsIndex] = useState(START_INDEX);
+  const [superOddsIndex, setSuperOddsIndex] = useState(START_INDEX);
   const [showReels, setShowReels] = useState(false);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const tabOpacity = useRef(new Animated.Value(0)).current;
 
-  const previewPlayer = useVideoPlayer(require('../../assets/videos/neiff.mp4'), (p) => {
+  const previewPlayer = useVideoPlayer(require('../../assets/videos/video1.mp4'), (p) => {
     p.loop = true;
     p.muted = true;
     p.play();
@@ -131,13 +134,25 @@ export function HomePreviewScreen({
   }
 
   const moveOdds = (dir: 'left' | 'right') => {
-    let next = dir === 'left' ? oddsIndex - 1 : oddsIndex + 1;
-    setOddsIndex(next);
+    let next = dir === 'left' ? superOddsIndex - 1 : superOddsIndex + 1;
+    setSuperOddsIndex(next);
     oddsListRef.current?.scrollToOffset({
       offset: next * FULL_CARD_WIDTH,
       animated: true
     });
   }
+
+  // Handle Tab Transition Animation
+  useEffect(() => {
+    // Reset opacity
+    tabOpacity.setValue(0);
+    // Fade in
+    Animated.timing(tabOpacity, {
+      toValue: 1,
+      duration: 400, // 0.4s
+      useNativeDriver: true,
+    }).start();
+  }, [activeTab]);
 
   if (showReels) {
     return <FullReelsScreen onClose={() => setShowReels(false)} />;
@@ -154,7 +169,8 @@ export function HomePreviewScreen({
         onTabSelect={setActiveTab}
       />
 
-      {activeTab === 'Home' ? (
+      <Animated.View style={{ flex: 1, opacity: tabOpacity }}>
+        {activeTab === 'Home' ? (
         <View className="flex-1 pt-12">
           {/* Header (Menu, Logo, Entrar) */}
           <View className="flex-row items-center justify-between px-4 py-3">
@@ -168,12 +184,14 @@ export function HomePreviewScreen({
               resizeMode="contain"
             />
 
-            <Pressable
-              className="bg-white px-4 py-1.5 rounded-[20px] active:opacity-80"
-              onPress={() => onLoginClick()}
-            >
-              <Text className="text-[#242424] font-bold text-[13px]">Entrar</Text>
-            </Pressable>
+            {!isLoggedIn && (
+              <Pressable
+                className="bg-white px-4 py-1.5 rounded-[20px] active:opacity-80"
+                onPress={() => onLoginClick()}
+              >
+                <Text className="text-[#242424] font-bold text-[13px]">Entrar</Text>
+              </Pressable>
+            )}
           </View>
 
           {/* Search Bar */}
@@ -197,7 +215,7 @@ export function HomePreviewScreen({
                   showsHorizontalScrollIndicator={false}
                   onMomentumScrollEnd={(e) => {
                     const index = Math.round(e.nativeEvent.contentOffset.x / (width - 32));
-                    setOddsIndex(index);
+                    setActiveIndex(index);
                   }}
                   renderItem={({ item }) => (
                     <Pressable 
@@ -218,9 +236,9 @@ export function HomePreviewScreen({
                   <Pressable
                     className="w-7 h-9 bg-[#17C900] items-center justify-center rounded-r-md active:opacity-70"
                     onPress={() => {
-                      if (oddsIndex > 0) {
-                        const next = oddsIndex - 1;
-                        setOddsIndex(next);
+                      if (activeIndex > 0) {
+                        const next = activeIndex - 1;
+                        setActiveIndex(next);
                         flatListRef.current?.scrollToOffset({ offset: next * (width - 32), animated: true });
                       }
                     }}
@@ -230,9 +248,9 @@ export function HomePreviewScreen({
                   <Pressable
                     className="w-7 h-9 bg-[#17C900] items-center justify-center rounded-l-md active:opacity-70"
                     onPress={() => {
-                      if (oddsIndex < carouselItems.length - 1) {
-                        const next = oddsIndex + 1;
-                        setOddsIndex(next);
+                      if (activeIndex < carouselItems.length - 1) {
+                        const next = activeIndex + 1;
+                        setActiveIndex(next);
                         flatListRef.current?.scrollToOffset({ offset: next * (width - 32), animated: true });
                       }
                     }}
@@ -246,7 +264,7 @@ export function HomePreviewScreen({
                   {carouselItems.map((_, i) => (
                     <View 
                       key={i} 
-                      className={`w-2 h-2 rounded-full ${i === oddsIndex % carouselItems.length ? 'bg-[#17C900]' : 'bg-gray-600'}`} 
+                      className={`w-2 h-2 rounded-full ${i === activeIndex % carouselItems.length ? 'bg-[#17C900]' : 'bg-gray-600'}`} 
                     />
                   ))}
                 </View>
@@ -274,7 +292,7 @@ export function HomePreviewScreen({
             </View>
 
             {/* 3. Shorts + Winners Row */}
-            <View className="flex-row px-4 mt-2 mb-8 h-[220px]">
+            <View className="flex-row px-4 mt-2 mb-8 h-[230px]">
               {/* Left: Reel Card (Responsive Width) */}
               <Pressable 
                 className="w-[32%] h-full bg-black rounded-[25px] items-center justify-center border border-white/20 mr-3 overflow-hidden"
@@ -288,61 +306,61 @@ export function HomePreviewScreen({
                 />
                 <View className="items-center z-10 bg-black/30 p-2 rounded-xl">
                    <Feather name="play-circle" size={32} color="white" opacity={0.8} />
-                   <Text className="text-white font-bold text-[10px] mt-1 shadow-sm text-center">Video 1</Text>
+                   <Text className="text-white font-bold text-[10px] mt-1 shadow-sm text-center">Shorts da Sorte</Text>
                 </View>
               </Pressable>
 
-              {/* Right: Winner Card (Responsive flex-1) */}
+              {/* Right: Winner Card */}
               <LinearGradient
                 colors={['#000000', '#0007C9']}
-                style={{ borderRadius: 10 }}
-                className="flex-1 h-full p-4 items-center border border-white/10"
+                style={{ borderRadius: 14 }}
+                className="flex-1 h-full px-4 pt-3 pb-2 border border-white/10 justify-between"
               >
-                {/* Header: Bolt + Title (Centered) */}
-                <View className="flex-row items-center justify-center mb-1 w-full flex-wrap">
-                  <Feather name="zap" size={14} color="white" style={{ marginRight: 6 }} />
-                  <Text className="text-white font-bold text-[12px] text-center" numberOfLines={1}>
-                    Alguém acabou de ganhar
-                  </Text>
+                {/* Header + Prize */}
+                <View className="items-center">
+                  <View className="flex-row items-center justify-center w-full mb-2">
+                    <Feather name="zap" size={15} color="white" style={{ marginRight: 6 }} />
+                    <Text className="text-white font-bold text-[13px] text-center">
+                      Alguém acabou de ganhar
+                    </Text>
+                  </View>
+                  <View className="flex-row items-end justify-center">
+                    <Text className="text-[#00FF00] font-bold text-[14px] mr-1 mb-0.5">R$</Text>
+                    <Text className="text-[#00FF00] font-bold text-[26px] tracking-tighter" numberOfLines={1}>100.000.000</Text>
+                  </View>
                 </View>
 
-                {/* Prize Amount (Centered & Large) */}
-                <View className="flex-row items-end justify-center mb-2">
-                  <Text className="text-[#00FF00] font-bold text-[14px] mr-1 mb-1">R$</Text>
-                  <Text className="text-[#00FF00] font-bold text-[26px] tracking-tighter" numberOfLines={1}>100.000.000</Text>
-                </View>
-
-                {/* Separator Line */}
-                <View className="w-[90%] h-[1px] bg-white/20 mb-3" />
+                {/* Separator */}
+                <View className="w-full h-[1.5px] bg-white/30 my-1" />
                 
-                {/* Info Section (Left-aligned or Centered if narrow) */}
+                {/* Info Section */}
                 <View className="w-full">
-                  <View className="flex-row items-center mb-1">
-                    <Text className="text-white text-[11px] font-bold">No Bac-Bo</Text>
-                    <View className="ml-1.5 bg-[#17C900] w-3 h-3 rounded-sm flex-row flex-wrap p-[1px] justify-between">
-                       <View className="w-[3px] h-[3px] bg-black rounded-full" />
-                       <View className="w-[3px] h-[3px] bg-black rounded-full" />
-                       <View className="w-[3px] h-[3px] bg-black rounded-full" />
-                       <View className="w-[3px] h-[3px] bg-black rounded-full" />
+                  <View className="flex-row items-center mb-2">
+                    <Text className="text-white text-[12px] font-bold">No Bac-Bo</Text>
+                    <View className="ml-2 bg-[#17C900] w-4 h-4 rounded-sm flex-row flex-wrap p-[2px] justify-between">
+                       <View className="w-[4px] h-[4px] bg-black rounded-full" />
+                       <View className="w-[4px] h-[4px] bg-black rounded-full" />
+                       <View className="w-[4px] h-[4px] bg-black rounded-full" />
+                       <View className="w-[4px] h-[4px] bg-black rounded-full" />
                     </View>
                   </View>
                   
                   <View className="flex-row items-center mb-2">
                     <Image source={require('../../assets/icons/chat_homepreview.png')} className="w-4 h-4 mr-2" resizeMode="contain" />
-                    <Text className="text-white text-[11px] font-bold">User23156 sacou há 5 min</Text>
+                    <Text className="text-white text-[12px] font-bold">User23156 sacou há 5 min</Text>
                   </View>
 
-                  <Text className="text-white text-[10px]">
+                  <Text className="text-white text-[11px]">
                     Já pagamos <Text className="font-bold">R$242.000.000</Text> hoje
                   </Text>
                 </View>
 
-                {/* Action Button (Centered at bottom) */}
+                {/* Action Button */}
                 <Pressable
-                  className="bg-white w-full py-2.5 rounded-full items-center justify-center active:bg-gray-200 mt-auto"
+                  className="bg-white w-full py-3 rounded-full items-center justify-center active:bg-gray-200 mt-2"
                   onPress={() => onLoginClick()}
                 >
-                  <Text className="text-black font-black text-[12px]">QUERO TENTAR AGORA</Text>
+                  <Text className="text-black font-black text-[13px]">QUERO TENTAR AGORA</Text>
                 </Pressable>
               </LinearGradient>
             </View>
@@ -506,7 +524,7 @@ export function HomePreviewScreen({
                     useNativeDriver: true, listener: (e: any) => {
                       const x = e.nativeEvent.contentOffset.x;
                       const idx = Math.round(x / FULL_CARD_WIDTH);
-                      if (idx !== oddsIndex) setOddsIndex(idx);
+                      if (idx !== superOddsIndex) setSuperOddsIndex(idx);
                     }
                   }
                 )}
@@ -651,6 +669,7 @@ export function HomePreviewScreen({
           </Pressable>
         </View>
       )}
+      </Animated.View>
 
       <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
     </View>

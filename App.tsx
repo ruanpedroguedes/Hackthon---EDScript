@@ -75,7 +75,7 @@ export default function App() {
     return (
       <PreferenceSelectionScreen
         onCassinoAoVivo={() => { setHasSelectedPreference(true); setActiveTab('Home'); setHomeScreen('Cassino'); }}
-        onEsportes={() => { setHasSelectedPreference(true); setActiveTab('Esportes'); }}
+        onEsportes={() => { setHasSelectedPreference(true); setActiveTab('Home'); setHomeScreen('Home'); }}
         onCassino={() => { setHasSelectedPreference(true); setActiveTab('Home'); setHomeScreen('Cassino'); }}
         onSair={() => { 
           setHasSelectedPreference(false); 
@@ -88,34 +88,7 @@ export default function App() {
   }
 
   return (
-    <View className="flex-1 bg-[#090B22] pt-12">
-      <StatusBar barStyle="light-content" backgroundColor="#0B0F2A" />
-      <View className="flex-1">
-        {activeTab === 'Home' && (homeScreen === 'Home' ? 
-          <HomeScreen 
-            onSearchClick={() => setHomeScreen('Cassino')} 
-            onBetSelected={() => setShowBetModal(true)}
-          /> : 
-          <CassinoScreen onBack={() => setHomeScreen('Home')} />
-        )}
-        {activeTab === 'Esportes' && (
-           <SoccerScreen 
-             onBack={() => {
-               setActiveTab('Home');
-               setHomeScreen('Home');
-             }} 
-             onBetSelected={() => setShowBetModal(true)}
-           />
-        )}
-        {activeTab === 'Populares' && <PopularesScreen />}
-        {activeTab === 'Suporte' && <SuporteScreen />}
-      </View>
-      <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
-
-      <BetRecommendationScreen 
-        visible={showBetModal}
-        onBack={() => setShowBetModal(false)}
-      />
-    </View>
+    <HomePreviewScreen isLoggedIn={true} />
   );
 }
+
