@@ -179,13 +179,16 @@ export function HomePreviewScreen({ onLoginClick }: { onLoginClick: () => void }
                 setOddsIndex(index);
               }}
               renderItem={({ item }) => (
-                <View style={{ width: width - 36, height: '100%', marginRight: 4 }}>
+                <Pressable 
+                  style={{ width: width - 36, height: '100%', marginRight: 4 }}
+                  onPress={() => onLoginClick()}
+                >
                   <Image
                     source={item.img}
                     className="w-full h-full rounded-[25px]"
                     resizeMode="cover"
                   />
-                </View>
+                </Pressable>
               )}
             />
             
@@ -231,22 +234,22 @@ export function HomePreviewScreen({ onLoginClick }: { onLoginClick: () => void }
 
         {/* 2. Atividades Principais */}
         <View className="flex-row justify-between px-4 mt-8 mb-6">
-          <View className="items-center w-[23%]">
+          <Pressable className="items-center w-[23%]" onPress={() => onLoginClick()}>
             <Image source={require('../../assets/atv_principais/coelho.png')} className="w-[82px] h-[82px] rounded-full" resizeMode="cover" />
             <Text className="text-white font-semibold text-[11px] mt-2 text-center leading-tight">Prêmio diário</Text>
-          </View>
-          <View className="items-center w-[23%]">
+          </Pressable>
+          <Pressable className="items-center w-[23%]" onPress={() => onLoginClick()}>
             <Image source={require('../../assets/atv_principais/bau.png')} className="w-[82px] h-[82px] rounded-full" resizeMode="cover" />
             <Text className="text-white font-semibold text-[11px] mt-2 text-center leading-tight">Baú</Text>
-          </View>
-          <View className="items-center w-[23%]">
+          </Pressable>
+          <Pressable className="items-center w-[23%]" onPress={() => onLoginClick()}>
             <Image source={require('../../assets/atv_principais/bola_de_futebol.png')} className="w-[82px] h-[82px] rounded-full" resizeMode="cover" />
             <Text className="text-white font-semibold text-[11px] mt-2 text-center leading-tight">Supper Odds</Text>
-          </View>
-          <View className="items-center w-[23%]">
+          </Pressable>
+          <Pressable className="items-center w-[23%]" onPress={() => onLoginClick()}>
             <Image source={require('../../assets/atv_principais/porquinho.png')} className="w-[82px] h-[82px] rounded-full" resizeMode="cover" />
             <Text className="text-white font-semibold text-[11px] mt-2 text-center leading-tight">Missões</Text>
-          </View>
+          </Pressable>
         </View>
 
         {/* 3. Shorts + Winners Row */}
@@ -345,13 +348,16 @@ export function HomePreviewScreen({ onLoginClick }: { onLoginClick: () => void }
               horizontal
               showsHorizontalScrollIndicator={false}
               renderItem={({ item, index }) => (
-                <View style={{ width: 150, marginLeft: index === 0 ? 35 : 10, marginRight: index === gamesItems.length - 1 ? 35 : 0 }}>
+                <Pressable 
+                  style={{ width: 150, marginLeft: index === 0 ? 35 : 10, marginRight: index === gamesItems.length - 1 ? 35 : 0 }}
+                  onPress={() => onLoginClick()}
+                >
                   <Image
                     source={item.img}
                     className="w-full h-[110px] rounded-[10px]"
                     resizeMode="cover"
                   />
-                </View>
+                </Pressable>
               )}
             />
 

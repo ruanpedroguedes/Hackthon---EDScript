@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { View, SafeAreaView, StatusBar } from 'react-native';
 import { LoginScreen } from './src/screens/LoginScreen';
 import { ChoiceScreen } from './src/screens/ChoiceScreen';
+import { RegisterScreen } from './src/screens/RegisterScreen';
 import { CassinoScreen } from './src/screens/CassinoScreen';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { SoccerScreen } from './src/screens/SoccerScreen';
@@ -14,7 +15,7 @@ import { HomePreviewScreen } from './src/screens/HomePreviewScreen';
 export default function App() {
   const [showPreview, setShowPreview] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [hasChosen, setHasChosen] = useState(false);
+  const [currentFlow, setCurrentFlow] = useState<'choice' | 'login' | 'register'>('choice');
   const [activeTab, setActiveTab] = useState('Home'); 
   const [homeScreen, setHomeScreen] = useState('Home');
 
@@ -23,28 +24,44 @@ export default function App() {
   }
 
   if (!isLoggedIn) {
-    return <LoginScreen onLogin={() => setIsLoggedIn(true)} />;
-  }
-
-  if (!hasChosen) {
-    return (
-      <ChoiceScreen onComplete={() => {
-        setHasChosen(true);
-        setActiveTab('Home');
-      }} />
-    );
+     if (currentFlow === 'choice') {
+       return (
+         <ChoiceScreen 
+           onSelectLogin={() => setCurrentFlow('login')}
+           onSelectRegister={() => setCurrentFlow('register')}
+           onBack={() => setShowPreview(true)}
+         />
+       );
+     }
+     if (currentFlow === 'register') {
+       return (
+         <RegisterScreen 
+           onBack={() => setCurrentFlow('choice')}
+           onLoginClick={() => setCurrentFlow('login')}
+           onSuccess={() => {
+             setIsLoggedIn(true);
+           }}
+         />
+       );
+     }
+     if (currentFlow === 'login') {
+       return (
+         <LoginScreen 
+           onBack={() => setCurrentFlow('choice')}
+           onRegisterClick={() => setCurrentFlow('register')}
+           onLogin={() => setIsLoggedIn(true)} 
+         />
+       );
+     }
   }
 
   return (
     <View className="flex-1 bg-[#090B22] pt-12">
       <StatusBar barStyle="light-content" backgroundColor="#0B0F2A" />
       <View className="flex-1">
-        {activeTab === 'Home' && (
-           homeScreen === 'Home' ? (
-             <HomeScreen onSearchClick={() => setHomeScreen('Cassino')} />
-           ) : (
-             <CassinoScreen onBack={() => setHomeScreen('Home')} />
-           )
+        {activeTab === 'Home' && (homeScreen === 'Home' ? 
+          <HomeScreen onSearchClick={() => setHomeScreen('Cassino')} /> : 
+          <CassinoScreen onBack={() => setHomeScreen('Home')} />
         )}
         {activeTab === 'Esportes' && (
            <SoccerScreen onBack={() => {
