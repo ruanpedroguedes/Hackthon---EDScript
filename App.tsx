@@ -20,7 +20,19 @@ export default function App() {
   const [homeScreen, setHomeScreen] = useState('Home');
 
   if (showPreview) {
-    return <HomePreviewScreen onLoginClick={() => setShowPreview(false)} />;
+    return (
+      <HomePreviewScreen 
+        onLoginClick={() => setShowPreview(false)} 
+        onDirectLogin={() => {
+          setShowPreview(false);
+          setCurrentFlow('login');
+        }}
+        onDirectRegister={() => {
+          setShowPreview(false);
+          setCurrentFlow('register');
+        }}
+      />
+    );
   }
 
   if (!isLoggedIn) {

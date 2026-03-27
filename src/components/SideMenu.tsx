@@ -8,9 +8,10 @@ const { width } = Dimensions.get('window');
 interface SideMenuProps {
   isVisible: boolean;
   onClose: () => void;
+  onTabSelect: (tab: string) => void;
 }
 
-export function SideMenu({ isVisible, onClose }: SideMenuProps) {
+export function SideMenu({ isVisible, onClose, onTabSelect }: SideMenuProps) {
   return (
     <Modal
       visible={isVisible}
@@ -55,12 +56,21 @@ export function SideMenu({ isVisible, onClose }: SideMenuProps) {
                   { name: 'Cassino', icon: 'slot-machine-outline' },
                   { name: 'Cassino ao Vivo', icon: 'dice-5-outline' }
                 ].map((cat, i) => (
-                  <View key={i} className="items-center w-[22%]">
+                  <Pressable 
+                    key={i} 
+                    className="items-center w-[22%]"
+                    onPress={() => {
+                      if (cat.name === 'Esportes' || cat.name === 'Cassino') {
+                        onTabSelect(cat.name);
+                        onClose();
+                      }
+                    }}
+                  >
                     <View className="w-14 h-14 bg-white/10 rounded-xl items-center justify-center mb-1">
                       <MaterialCommunityIcons name={cat.icon as any} size={28} color="white" />
                     </View>
                     <Text className="text-white text-[10px] text-center font-medium">{cat.name}</Text>
-                  </View>
+                  </Pressable>
                 ))}
               </View>
             </View>
@@ -86,7 +96,14 @@ export function SideMenu({ isVisible, onClose }: SideMenuProps) {
             {/* List Sections */}
             <SectionHeader title="Esportes" />
             <ListItem icon="calendar" title="Eventos do Dia" />
-            <ListItem icon="trending-up" title="Populares" />
+            <ListItem 
+              icon="trending-up" 
+              title="Populares" 
+              onPress={() => {
+                onTabSelect('Populares');
+                onClose();
+              }} 
+            />
             <ListItem icon="divide-circle" title="Bolão da Sorte" />
             <ListItem icon="monitor" title="Virtuais" />
             <ListItem icon="activity" title="Resultados ao Vivo" />
@@ -94,7 +111,14 @@ export function SideMenu({ isVisible, onClose }: SideMenuProps) {
 
             <SectionHeader title="Cassino" />
             <ListItem icon="grid" title="Todos os jogos" />
-            <ListItem icon="star" title="Populares" />
+            <ListItem 
+              icon="star" 
+              title="Populares" 
+              onPress={() => {
+                onTabSelect('Populares');
+                onClose();
+              }} 
+            />
             <ListItem icon="zap" title="Novo" />
             <ListItem icon="layers" title="Video Slots" />
             <ListItem icon="target" title="Crash Games" />
@@ -135,9 +159,12 @@ function SectionHeader({ title }: { title: string }) {
   );
 }
 
-function ListItem({ icon, title }: { icon: string, title: string }) {
+function ListItem({ icon, title, onPress }: { icon: string, title: string, onPress?: () => void }) {
   return (
-    <Pressable className="flex-row items-center px-4 py-4 border-b border-white/5 active:bg-white/5">
+    <Pressable 
+      className="flex-row items-center px-4 py-4 border-b border-white/5 active:bg-white/5"
+      onPress={onPress}
+    >
       <Feather name={icon as any} size={20} color="white" />
       <Text className="text-white text-[15px] font-medium ml-4">{title}</Text>
     </Pressable>
