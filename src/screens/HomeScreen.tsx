@@ -4,7 +4,11 @@ import { Feather } from '@expo/vector-icons';
 
 const categories = ['Todos os jogos', 'Últimos jogados', 'Novidades', 'Populares', 'Slots', 'Ao Vivo'];
 
-export function HomeScreen({ onSearchClick }: { onSearchClick: () => void }) {
+export function HomeScreen({ onSearchClick, onBetSelected }: { onSearchClick: () => void; onBetSelected?: () => void }) {
+  const mockMatches = [
+    { id: '1', team1: 'Real Madrid', team2: 'Liverpool', time: 'Hoje 21:00', odds: ['3.46', '2.50', '2.10'] },
+    { id: '2', team1: 'Chelsea', team2: 'Juventus', time: 'Amanhã 16:00', odds: ['2.15', '3.10', '2.80'] },
+  ];
   return (
     <View className="flex-1 bg-[#090B22]">
       <View className="flex-row items-center justify-between px-4 py-2 mt-2">
@@ -45,12 +49,46 @@ export function HomeScreen({ onSearchClick }: { onSearchClick: () => void }) {
         </Pressable>
       </View>
 
-      <View className="flex-1 items-center justify-center px-6 mt-10">
-        <Text className="text-white text-2xl font-bold text-center">Conteúdo da Home</Text>
-        <Text className="text-gray-400 mt-2 text-center">
-          (Em andamento)
-        </Text>
-      </View>
+      <ScrollView className="flex-1 mt-6 px-4" showsVerticalScrollIndicator={false}>
+        <Text className="text-white text-lg font-bold mb-4">Em Destaque</Text>
+        
+        {mockMatches.map((match) => (
+          <View key={match.id} className="bg-[#1D2146] rounded-xl p-4 mb-4 border border-[#2B325A]">
+            <View className="flex-row items-center justify-between mb-3">
+              <Text className="text-white font-bold text-sm px-2 flex-1 text-center" numberOfLines={1}>{match.team1}</Text>
+              <Text className="text-[#00D1FF] text-xs font-black">X</Text>
+              <Text className="text-white font-bold text-sm px-2 flex-1 text-center" numberOfLines={1}>{match.team2}</Text>
+            </View>
+            <Text className="text-gray-400 text-[10px] uppercase font-bold text-center mb-3">
+              {match.time}
+            </Text>
+
+            <View className="flex-row justify-between">
+              <Pressable
+                onPress={onBetSelected}
+                className="flex-[0.31] bg-[#2B325A] py-2.5 rounded-lg items-center active:opacity-70"
+              >
+                <Text className="text-white font-bold text-sm">{match.odds[0]}</Text>
+                <Text className="text-gray-400 text-[9px] uppercase mt-0.5">Casa</Text>
+              </Pressable>
+              <Pressable
+                onPress={onBetSelected}
+                className="flex-[0.31] bg-[#2B325A] py-2.5 rounded-lg items-center active:opacity-70"
+              >
+                <Text className="text-white font-bold text-sm">{match.odds[1]}</Text>
+                <Text className="text-gray-400 text-[9px] uppercase mt-0.5">Empate</Text>
+              </Pressable>
+              <Pressable
+                onPress={onBetSelected}
+                className="flex-[0.31] bg-[#2B325A] py-2.5 rounded-lg items-center active:opacity-70"
+              >
+                <Text className="text-white font-bold text-sm">{match.odds[2]}</Text>
+                <Text className="text-gray-400 text-[9px] uppercase mt-0.5">Fora</Text>
+              </Pressable>
+            </View>
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
 }
