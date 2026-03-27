@@ -9,7 +9,7 @@ const matches = [
   { id: '4', team1: 'Cruzeiro', team2: 'Santos', time: 'Hoje 16:00', odds: ['1.74', '3.58', '5.42'], badges: ['BB', '+1136'] },
 ];
 
-export function SoccerScreen({ onBack }: { onBack: () => void }) {
+export function SoccerScreen({ onBack, onBetSelected }: { onBack: () => void; onBetSelected?: () => void }) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const [activeSport, setActiveSport] = useState('Futebol');
@@ -17,6 +17,9 @@ export function SoccerScreen({ onBack }: { onBack: () => void }) {
   const [selectedOdds, setSelectedOdds] = useState<Record<string, number>>({});
 
   const toggleOdd = (matchId: string, oddIndex: number) => {
+    if (selectedOdds[matchId] !== oddIndex && onBetSelected) {
+      onBetSelected();
+    }
     setSelectedOdds(prev => ({
       ...prev,
       [matchId]: prev[matchId] === oddIndex ? -1 : oddIndex
