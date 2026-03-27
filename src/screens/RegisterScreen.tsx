@@ -3,18 +3,20 @@ import { View, Text, TextInput, Pressable, ScrollView, Image, StatusBar, SafeAre
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-interface LoginScreenProps {
+interface RegisterScreenProps {
   onBack: () => void;
-  onRegisterClick: () => void;
-  onLogin: () => void;
+  onLoginClick: () => void;
+  onSuccess: () => void;
 }
 
-export function LoginScreen({ onBack, onRegisterClick, onLogin }: LoginScreenProps) {
+export function RegisterScreen({ onBack, onLoginClick, onSuccess }: RegisterScreenProps) {
   const [formData, setFormData] = useState({
-    login: '',
+    cpf: '',
+    email: '',
     senha: '',
+    confirmarSenha: '',
+    celular: '',
   });
-  const [stayConnected, setStayConnected] = useState(false);
 
   const InputField = ({ label, placeholder, value, onChangeText, secureTextEntry = false }: any) => (
     <View className="mb-3">
@@ -49,11 +51,11 @@ export function LoginScreen({ onBack, onRegisterClick, onLogin }: LoginScreenPro
         />
 
         <View className="flex-row bg-[#02023D] border border-white/20 rounded-full overflow-hidden h-[34px] w-[130px]">
-          <Pressable onPress={onRegisterClick} className="flex-1 bg-white items-center justify-center">
-            <Text className="text-[#02023D] font-bold text-[11px]">Cadastro</Text>
-          </Pressable>
           <Pressable className="flex-1 bg-[#091054] items-center justify-center">
-            <Text className="text-white font-bold text-[11px]">Login</Text>
+            <Text className="text-white font-bold text-[11px]">Cadastro</Text>
+          </Pressable>
+          <Pressable onPress={onLoginClick} className="flex-1 bg-white items-center justify-center">
+            <Text className="text-[#02023D] font-bold text-[11px]">Login</Text>
           </Pressable>
         </View>
       </View>
@@ -72,16 +74,16 @@ export function LoginScreen({ onBack, onRegisterClick, onLogin }: LoginScreenPro
             <View className="flex-1 justify-center z-10">
               <Image 
                 source={require('../../assets/logos/bemvindo.png')} 
-                className="w-48 h-12 mb-4" 
+                className="w-48 h-24 mb-4" 
                 resizeMode="contain" 
               />
-              <Text className="text-white font-black italic text-[14px] leading-[20px]">
-                Você sabia que está rolando torneio e desafios com recompensas em coins para você trocar por rodadas na loja?
+              <Text className="text-white font-black italic text-[16px] leading-[22px]">
+                Você sabia que na Esportes da Sorte liberamos giros grátis todos os dias?
               </Text>
             </View>
             <View className="absolute right-[-20px] bottom-[-10px] w-[180px] h-[180px]">
                <Image 
-                source={require('../../assets/logos/fotogeniologin.png')} 
+                source={require('../../assets/logos/fotocoelhologin.png')} 
                 className="w-full h-full" 
                 resizeMode="contain" 
               />
@@ -97,10 +99,16 @@ export function LoginScreen({ onBack, onRegisterClick, onLogin }: LoginScreenPro
         {/* Inputs */}
         <View className="px-4">
           <InputField 
-            label="LOGIN" 
-            placeholder="USUÁRIO, CPF, E-MAIL OU TELEFONE" 
-            value={formData.login}
-            onChangeText={(t: string) => setFormData({...formData, login: t})}
+            label="CPF" 
+            placeholder="Ex: 111.111.111-11" 
+            value={formData.cpf}
+            onChangeText={(t: string) => setFormData({...formData, cpf: t})}
+          />
+          <InputField 
+            label="E-MAIL" 
+            placeholder="Ex: usuario@gmail.com" 
+            value={formData.email}
+            onChangeText={(t: string) => setFormData({...formData, email: t})}
           />
           <InputField 
             label="SENHA" 
@@ -109,34 +117,28 @@ export function LoginScreen({ onBack, onRegisterClick, onLogin }: LoginScreenPro
             value={formData.senha}
             onChangeText={(t: string) => setFormData({...formData, senha: t})}
           />
+          <InputField 
+            label="CONFIRMAR SENHA" 
+            placeholder="Ex: Olamundo.1234" 
+            secureTextEntry 
+            value={formData.confirmarSenha}
+            onChangeText={(t: string) => setFormData({...formData, confirmarSenha: t})}
+          />
+          <InputField 
+            label="NÚMERO DE CELULAR" 
+            placeholder="Ex: +55 (99) 99999-9999" 
+            value={formData.celular}
+            onChangeText={(t: string) => setFormData({...formData, celular: t})}
+          />
         </View>
 
-        {/* Options */}
-        <View className="px-4 mt-2">
+        {/* Register Button - Based on design, usually at the bottom */}
+        <View className="px-4 mt-4">
           <Pressable 
-            onPress={() => setStayConnected(!stayConnected)}
-            className="flex-row items-center mb-6"
-          >
-            <View className={`w-5 h-5 border border-white/40 rounded mr-2 items-center justify-center ${stayConnected ? 'bg-[#17C900]' : ''}`}>
-               {stayConnected && <Feather name="check" size={14} color="black" />}
-            </View>
-            <Text className="text-white text-xs">Mantenha-me conectado</Text>
-          </Pressable>
-
-          <Pressable className="items-center">
-            <Text className="text-white text-sm">
-              Esqueceu sua <Text className="font-bold">senha?</Text>
-            </Text>
-          </Pressable>
-        </View>
-
-        {/* Login Button */}
-        <View className="px-4 mt-8">
-          <Pressable 
-            onPress={onLogin}
+            onPress={onSuccess}
             className="bg-[#17C900] py-4 rounded-[15px] items-center active:opacity-80"
           >
-            <Text className="text-black font-black text-lg uppercase">Entrar</Text>
+            <Text className="text-black font-black text-lg">CADASTRAR</Text>
           </Pressable>
         </View>
 

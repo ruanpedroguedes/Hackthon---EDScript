@@ -1,100 +1,93 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, Pressable, StatusBar, SafeAreaView, Image } from 'react-native';
-import { LigaCard } from '../components/LigaCard';
-import { Section } from '../components/Section';
-import { Button } from '../components/Button';
+import React from 'react';
+import { View, Text, Pressable, StatusBar, Image, SafeAreaView, Dimensions } from 'react-native';
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
-const ligas = [
-  { id: '1', name: 'Brasileirão', image: require('../../assets/soccer/brasileirao.png') },
-  { id: '2', name: 'Libertadores', image: require('../../assets/soccer/libertadores.png') },
-  { id: '3', name: 'Champions League', image: require('../../assets/soccer/champions.png') },
-  { id: '4', name: 'Série A Itália', image: require('../../assets/soccer/serieA.png') },
-  { id: '5', name: 'Europa League', image: require('../../assets/soccer/europa_league_no_bg 1.png') },
-  { id: '6', name: 'Conference League', image: require('../../assets/soccer/conferenceleague.png') },
-  { id: '7', name: 'Premier League', image: require('../../assets/soccer/premirerleague.png') },
-  { id: '8', name: '1ª Liga de Portugal', image: require('../../assets/soccer/1ligadeportugal.png') },
-  { id: '9', name: 'La Liga', image: require('../../assets/soccer/laliga.png') },
-  { id: '10', name: 'Bundesliga', image: require('../../assets/soccer/bundesliga.png') },
-  { id: '11', name: 'Ligue 1', image: require('../../assets/soccer/ligue1.png') },
-  { id: '12', name: 'Copa do Rei', image: require('../../assets/soccer/copadorei.png') },
-];
+const { width } = Dimensions.get('window');
 
-const outrosEsportes = [
-  { id: 'esporte_1', name: 'Basquete', image: require('../../assets/soccer/basquete.png') },
-  { id: 'esporte_2', name: 'Vôlei', image: require('../../assets/soccer/volei.png') },
-  { id: 'esporte_3', name: 'Tênis', image: require('../../assets/soccer/tenis.png') },
-];
+interface ChoiceScreenProps {
+  onSelectLogin: () => void;
+  onSelectRegister: () => void;
+  onBack: () => void;
+}
 
-export function ChoiceScreen({ onComplete }: { onComplete?: () => void }) {
-  const [selectedLigas, setSelectedLigas] = useState<string[]>([]);
-
-  const toggleLiga = (id: string) => {
-    setSelectedLigas(prev => 
-      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
-    );
-  };
-
+export function ChoiceScreen({ onSelectLogin, onSelectRegister, onBack }: ChoiceScreenProps) {
   return (
-    <View className="flex-1 bg-[#02023D] pt-12">
+    <View className="flex-1 bg-[#02023D] px-6 pt-12">
       <StatusBar barStyle="light-content" backgroundColor="#02023D" />
-      <ScrollView
-        className="flex-1"
-        contentContainerStyle={{ paddingBottom: 60, paddingTop: 20, alignItems: 'center' }}
-        showsVerticalScrollIndicator={false}
-      >
+      
+      <View className="flex-row items-center justify-between mt-12">
+        <Pressable onPress={onBack} className="p-2">
+          <Feather name="chevron-left" size={28} color="white" />
+        </Pressable>
+        <Image 
+          source={require('../../assets/logos/logo_eds_deitada.png')} 
+          className="w-40 h-10" 
+          resizeMode="contain" 
+        />
+        <View className="w-10" />
+      </View>
 
-        <View className="mb-10 items-center">
-          <Image source={require('../../assets/logos/logo_eds_deitada.png')} className="w-48 h-10" resizeMode="contain" />
-        </View>
+      <View className="items-center mt-10 mb-6">
+        <Image 
+          source={require('../../assets/logos/japossuicadastro.png')} 
+          className="w-full h-40" 
+          resizeMode="contain" 
+        />
+      </View>
 
-        <View className="px-6 items-center mb-8 w-full">
-          <Text className="text-white text-2xl font-bold text-center mb-2">
-            Quais ligas você mais gosta de apostar?
-          </Text>
-          <Text className="text-gray-400 text-sm text-center">
-            Escolha para personalizar sua experiência
-          </Text>
-        </View>
-
-        <Section title="Futebol">
-          <View className="flex-row flex-wrap justify-between w-full">
-            {ligas.map(liga => (
-              <LigaCard 
-                key={liga.id} 
-                name={liga.name} 
-                imageSource={liga.image} 
-                isSelected={selectedLigas.includes(liga.id)}
-                onPress={() => toggleLiga(liga.id)}
+      <View className="flex-row justify-between flex-1 max-h-[380px]">
+        <Pressable 
+          onPress={onSelectLogin}
+          className="w-[48%] rounded-[30px] overflow-hidden bg-white"
+          style={{ elevation: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 4 }}
+        >
+          <View className="flex-1 items-center pt-6">
+            <Text className="text-[#0007C9] text-3xl font-black italic">SIM</Text>
+            <Text className="text-[#0007C9] text-lg font-bold italic mt-1">Entrar no app</Text>
+            <View className="mt-2 w-full flex-1">
+              <Image 
+                source={require('../../assets/logos/fotogeniologin.png')} 
+                className="w-full h-full" 
+                resizeMode="contain" 
               />
-            ))}
+            </View>
           </View>
-        </Section>
-
-        <Section title="Você também pode gostar">
-          <View className="flex-row justify-between w-full">
-            {outrosEsportes.map(esporte => (
-              <LigaCard 
-                key={esporte.id} 
-                name={esporte.name} 
-                imageSource={esporte.image} 
-                isSelected={selectedLigas.includes(esporte.id)}
-                onPress={() => toggleLiga(esporte.id)}
-              />
-            ))}
-          </View>
-        </Section>
-
-        <Pressable className="mt-4 mb-8">
-          <Text className="text-gray-300 font-medium underline">
-            Selecionar outra modalidade de aposta
-          </Text>
         </Pressable>
 
-        <View className="w-full px-6">
-          <Button title="Ir para a Home (Cassino)" onPress={onComplete || (() => { })} />
-        </View>
+        <Pressable 
+          onPress={onSelectRegister}
+          className="w-[48%] rounded-[30px] overflow-hidden"
+          style={{ elevation: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 4 }}
+        >
+          <LinearGradient colors={['#000000', '#0007C9']} style={{ flex: 1 }}>
+            <View className="flex-1 items-center pt-6">
+              <Text className="text-white text-3xl font-black italic">NÃO</Text>
+              <Text className="text-white text-lg font-bold italic mt-1 text-center">Criar meu perfil</Text>
+              <View className="mt-2 w-full flex-1">
+                <Image 
+                  source={require('../../assets/logos/fotocoelhologin.png')} 
+                  className="w-full h-full" 
+                  resizeMode="contain" 
+                />
+              </View>
+            </View>
+          </LinearGradient>
+        </Pressable>
+      </View>
 
-      </ScrollView>
+      <View className="mt-auto mb-20 items-center">
+        <Pressable className="flex-row items-center">
+          <Text className="text-white text-[13px] underline mr-2">
+            Possui alguma dúvida? Entre em contato com nosso suporte
+          </Text>
+          <Image 
+            source={require('../../assets/icons/chat_homepreview.png')} 
+            className="w-5 h-5" 
+            resizeMode="contain" 
+          />
+        </Pressable>
+      </View>
     </View>
   );
 }
