@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, Dimensions, FlatList, Pressable, Image, StatusBar, SafeAreaView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { Video, ResizeMode } from 'expo-av';
+import { useVideoPlayer, VideoView, VideoPlayer } from 'expo-video';
 
 const { width, height } = Dimensions.get('window');
 
@@ -11,6 +11,30 @@ const REELS_DATA = [
   { id: '3', video: require('../../assets/videos/maga.mp4'), title: 'Desafio Pro', user: '@eds_maga', likes: '12k', comments: '980' },
   { id: '4', video: require('../../assets/videos/shrek.mp4'), title: 'Dica do Ogro', user: '@eds_shrek', likes: '20k', comments: '3.5k' },
 ];
+
+function ReelItem({ item, isActive }: { item: any; isActive: boolean }) {
+  const player = useVideoPlayer(item.video, (p) => {
+    p.loop = true;
+    if (isActive) p.play();
+  });
+
+  React.useEffect(() => {
+    if (isActive) {
+      player.play();
+    } else {
+      player.pause();
+    }
+  }, [isActive, player]);
+
+  return (
+    <VideoView
+      player={player}
+      style={{ width, height, position: 'absolute' }}
+      contentFit="cover"
+      nativeControls={false}
+    />
+  );
+}
 
 export function FullReelsScreen({ onClose }: { onClose: () => void }) {
   const [activeVideoId, setActiveVideoId] = useState<string | null>(REELS_DATA[0].id);
@@ -40,15 +64,7 @@ export function FullReelsScreen({ onClose }: { onClose: () => void }) {
         viewabilityConfig={viewabilityConfig}
         renderItem={({ item }) => (
           <View style={{ width, height }} className="relative">
-            {/* Video Background - Só toca se for o item ativo */}
-            <Video
-              source={item.video}
-              style={{ width, height, position: 'absolute' }}
-              resizeMode={ResizeMode.COVER}
-              shouldPlay={item.id === activeVideoId}
-              isLooping
-              isMuted={false}
-            />
+            <ReelItem item={item} isActive={item.id === activeVideoId} />
 
             {/* Top Bar Overlay */}
             <SafeAreaView className="absolute top-0 left-0 right-0 z-10">

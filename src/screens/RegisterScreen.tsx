@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Pressable, ScrollView, Image, StatusBar, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, Pressable, ScrollView, Image, StatusBar } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -35,7 +35,7 @@ export function RegisterScreen({ onBack, onLoginClick, onSuccess }: RegisterScre
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-[#02023D]">
+    <View className="flex-1 bg-[#02023D]" style={{ flex: 1, backgroundColor: '#02023D' }}>
       <StatusBar barStyle="light-content" />
       
       {/* Header */}
@@ -153,6 +153,6 @@ export function RegisterScreen({ onBack, onLoginClick, onSuccess }: RegisterScre
         </View>
 
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
