@@ -6,10 +6,11 @@ import { useVideoPlayer, VideoView, VideoPlayer } from 'expo-video';
 const { width, height } = Dimensions.get('window');
 
 const REELS_DATA = [
-  { id: '1', video: require('../../assets/videos/neiff.mp4'), title: 'Dica do Dia: Premier League', user: '@eds_neiff', likes: '15k', comments: '1.2k' },
-  { id: '2', video: require('../../assets/videos/apostenotime.mp4'), title: 'Hora de Apostar!', user: '@eds_aposta', likes: '8k', comments: '450' },
-  { id: '3', video: require('../../assets/videos/maga.mp4'), title: 'Desafio Pro', user: '@eds_maga', likes: '12k', comments: '980' },
-  { id: '4', video: require('../../assets/videos/shrek.mp4'), title: 'Dica do Ogro', user: '@eds_shrek', likes: '20k', comments: '3.5k' },
+  { id: '1', video: require('../../assets/videos/video1.mp4'), title: 'Shorts da Sorte', user: '@eds_oficial', likes: '25k', comments: '2.1k' },
+  { id: '2', video: require('../../assets/videos/neiff.mp4'), title: 'Dica do Dia: Premier League', user: '@eds_neiff', likes: '15k', comments: '1.2k' },
+  { id: '3', video: require('../../assets/videos/apostenotime.mp4'), title: 'Hora de Apostar!', user: '@eds_aposta', likes: '8k', comments: '450' },
+  { id: '4', video: require('../../assets/videos/maga.mp4'), title: 'Desafio Pro', user: '@eds_maga', likes: '12k', comments: '980' },
+  { id: '5', video: require('../../assets/videos/shrek.mp4'), title: 'Dica do Ogro', user: '@eds_shrek', likes: '20k', comments: '3.5k' },
 ];
 
 function ReelItem({ item, isActive }: { item: any; isActive: boolean }) {
@@ -72,7 +73,7 @@ export function FullReelsScreen({ onClose }: { onClose: () => void }) {
                   <Pressable onPress={onClose} className="p-2 -ml-2">
                      <Feather name="arrow-left" size={28} color="white" />
                   </Pressable>
-                  <Text className="text-white font-bold text-lg">Reels</Text>
+                  <Text className="text-white font-bold text-lg">Shorts da Sorte</Text>
                   <View className="w-8" />
                </View>
             </SafeAreaView>
