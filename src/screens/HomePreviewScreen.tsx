@@ -8,6 +8,9 @@ import { BottomNav } from '../components/BottomNav';
 import { FullReelsScreen } from './FullReelsScreen';
 import { SideMenu } from '../components/SideMenu';
 import { PopularesPreviewScreen } from './PopularesPreviewScreen';
+import { CasinoHomeScreen } from './CasinoHomeScreen';
+import { SoccerScreen } from './SoccerScreen';
+import BetRecommendationScreen from './BetRecommendationScreen';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = width * 0.85;
@@ -51,14 +54,16 @@ export function HomePreviewScreen({
   onLoginClick = () => {},
   onDirectLogin = () => {},
   onDirectRegister = () => {},
-  isLoggedIn = false
+  isLoggedIn = false,
+  initialTab = 'Home'
 }: { 
   onLoginClick?: () => void;
   onDirectLogin?: () => void;
   onDirectRegister?: () => void;
   isLoggedIn?: boolean;
+  initialTab?: string;
 }) {
-  const [activeTab, setActiveTab] = useState('Home');
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [activeIndex, setActiveIndex] = useState(0);
   const [gamesIndex, setGamesIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
@@ -68,6 +73,7 @@ export function HomePreviewScreen({
   const [superOddsIndex, setSuperOddsIndex] = useState(START_INDEX);
   const [showReels, setShowReels] = useState(false);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const [showBetModal, setShowBetModal] = useState(false);
   const tabOpacity = useRef(new Animated.Value(0)).current;
 
   const previewPlayer = useVideoPlayer(require('../../assets/videos/video1.mp4'), (p) => {
@@ -442,7 +448,7 @@ export function HomePreviewScreen({
                     <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13, marginBottom: 8, textAlign: 'center' }}>Casa</Text>
                     <Pressable
                       className="bg-white/10 px-4 py-2 rounded-lg active:opacity-70"
-                      onPress={onLoginClick}
+                      onPress={() => isLoggedIn ? setShowBetModal(true) : onLoginClick()}
                     >
                       <Text className="text-white font-bold">1.80</Text>
                     </Pressable>
@@ -457,7 +463,7 @@ export function HomePreviewScreen({
                     <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13, marginBottom: 8, textAlign: 'center' }}>Empate</Text>
                     <Pressable
                       className="bg-white/10 px-4 py-2 rounded-lg active:opacity-70"
-                      onPress={onLoginClick}
+                      onPress={() => isLoggedIn ? setShowBetModal(true) : onLoginClick()}
                     >
                       <Text className="text-white font-bold">2.34</Text>
                     </Pressable>
@@ -476,7 +482,7 @@ export function HomePreviewScreen({
                     <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13, marginBottom: 8, textAlign: 'center' }}>Fora</Text>
                     <Pressable
                       className="bg-white/10 px-4 py-2 rounded-lg active:opacity-70"
-                      onPress={onLoginClick}
+                      onPress={() => isLoggedIn ? setShowBetModal(true) : onLoginClick()}
                     >
                       <Text className="text-white font-bold">2.85</Text>
                     </Pressable>
@@ -657,6 +663,13 @@ export function HomePreviewScreen({
           onDirectRegister={onDirectRegister}
           onMenuClick={() => setIsMenuVisible(true)} 
         />
+      ) : activeTab === 'Cassino' ? (
+        <CasinoHomeScreen />
+      ) : activeTab === 'Esportes' ? (
+        <SoccerScreen 
+          onBack={() => setActiveTab('Home')} 
+          onBetSelected={() => isLoggedIn ? setShowBetModal(true) : onLoginClick()}
+        />
       ) : (
         /* Fallback for other tabs like Cassino, Esportes for now */
         <View className="flex-1 items-center justify-center">
@@ -671,6 +684,7 @@ export function HomePreviewScreen({
       )}
       </Animated.View>
 
+      <BetRecommendationScreen visible={showBetModal} onBack={() => setShowBetModal(false)} />
       <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
     </View>
   );

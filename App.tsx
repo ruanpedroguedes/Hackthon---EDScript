@@ -4,7 +4,7 @@ import { View, SafeAreaView, StatusBar } from 'react-native';
 import { LoginScreen } from './src/screens/LoginScreen';
 import { ChoiceScreen } from './src/screens/ChoiceScreen';
 import { RegisterScreen } from './src/screens/RegisterScreen';
-import { CassinoScreen } from './src/screens/CassinoScreen';
+// Removed CassinoScreen import
 import { HomeScreen } from './src/screens/HomeScreen';
 import { SoccerScreen } from './src/screens/SoccerScreen';
 import { PopularesScreen } from './src/screens/PopularesScreen';
@@ -75,7 +75,7 @@ export default function App() {
     return (
       <PreferenceSelectionScreen
         onCassinoAoVivo={() => { setHasSelectedPreference(true); setActiveTab('Home'); setHomeScreen('Cassino'); }}
-        onEsportes={() => { setHasSelectedPreference(true); setActiveTab('Home'); setHomeScreen('Home'); }}
+        onEsportes={() => { setHasSelectedPreference(true); setActiveTab('Esportes'); setHomeScreen('Esportes'); }}
         onCassino={() => { setHasSelectedPreference(true); setActiveTab('Home'); setHomeScreen('Cassino'); }}
         onSair={() => { 
           setHasSelectedPreference(false); 
@@ -88,7 +88,7 @@ export default function App() {
   }
 
   return (
-    <HomePreviewScreen isLoggedIn={true} />
+    <HomePreviewScreen isLoggedIn={true} initialTab={homeScreen} />
   );
 }
 
