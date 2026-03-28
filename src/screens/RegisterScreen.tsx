@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, ScrollView, Image, StatusBar } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { LoadingOverlay } from '../components/LoadingOverlay';
 
 interface RegisterScreenProps {
   onBack: () => void;
@@ -17,6 +18,16 @@ export function RegisterScreen({ onBack, onLoginClick, onSuccess }: RegisterScre
     confirmarSenha: '',
     celular: '',
   });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleRegisterSubmit = () => {
+    setIsLoading(true);
+    // Simulating 2 seconds loading for backend auth
+    setTimeout(() => {
+      setIsLoading(false);
+      onSuccess();
+    }, 2000);
+  };
 
   const InputField = ({ label, placeholder, value, onChangeText, secureTextEntry = false }: any) => (
     <View className="mb-3">
@@ -37,6 +48,7 @@ export function RegisterScreen({ onBack, onLoginClick, onSuccess }: RegisterScre
   return (
     <View className="flex-1 bg-[#02023D]" style={{ flex: 1, backgroundColor: '#02023D' }}>
       <StatusBar barStyle="light-content" />
+      <LoadingOverlay visible={isLoading} />
       
       {/* Header */}
       <View className="flex-row items-center justify-between px-4 pt-10 pb-3">
@@ -64,31 +76,11 @@ export function RegisterScreen({ onBack, onLoginClick, onSuccess }: RegisterScre
         
         {/* Banner */}
         <View className="px-4 mt-2">
-          <LinearGradient
-            colors={['#000000', '#0007C9']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0.5 }}
-            className="rounded-[25px] overflow-hidden p-6 flex-row"
-            style={{ minHeight: 180 }}
-          >
-            <View className="flex-1 justify-center z-10">
-              <Image 
-                source={require('../../assets/logos/bemvindo.png')} 
-                className="w-48 h-24 mb-4" 
-                resizeMode="contain" 
-              />
-              <Text className="text-white font-black italic text-[16px] leading-[22px]">
-                Você sabia que na Esportes da Sorte liberamos giros grátis todos os dias?
-              </Text>
-            </View>
-            <View className="absolute right-[-20px] bottom-[-10px] w-[180px] h-[180px]">
-               <Image 
-                source={require('../../assets/logos/fotocoelhologin.png')} 
-                className="w-full h-full" 
-                resizeMode="contain" 
-              />
-            </View>
-          </LinearGradient>
+          <Image
+            source={require('../../assets/login/cadastro.png')}
+            style={{ width: '100%', height: 170, borderRadius: 25 }}
+            resizeMode="cover"
+          />
         </View>
 
         {/* Form Title */}
@@ -135,7 +127,7 @@ export function RegisterScreen({ onBack, onLoginClick, onSuccess }: RegisterScre
         {/* Register Button - Based on design, usually at the bottom */}
         <View className="px-4 mt-4">
           <Pressable 
-            onPress={onSuccess}
+            onPress={handleRegisterSubmit}
             className="bg-[#17C900] py-4 rounded-[15px] items-center active:opacity-80"
           >
             <Text className="text-black font-black text-lg">CADASTRAR</Text>

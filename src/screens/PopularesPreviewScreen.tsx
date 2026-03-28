@@ -8,13 +8,15 @@ interface PopularesPreviewScreenProps {
   onDirectLogin: () => void;
   onDirectRegister: () => void;
   onMenuClick: () => void;
+  isLoggedIn?: boolean;
 }
 
 export function PopularesPreviewScreen({
   onLoginClick,
   onDirectLogin,
   onDirectRegister,
-  onMenuClick
+  onMenuClick,
+  isLoggedIn = false,
 }: PopularesPreviewScreenProps) {
   const [activeCategory, setActiveCategory] = useState('Jogos populares');
 
@@ -40,12 +42,16 @@ export function PopularesPreviewScreen({
           resizeMode="contain"
         />
 
-        <Pressable
-          className="bg-white px-5 py-2 rounded-[20px] active:opacity-80"
-          onPress={onLoginClick}
-        >
-          <Text className="text-[#02023D] font-extrabold text-[14px]">Entrar</Text>
-        </Pressable>
+        {!isLoggedIn ? (
+          <Pressable
+            className="bg-white px-5 py-2 rounded-[20px] active:opacity-80"
+            onPress={onLoginClick}
+          >
+            <Text className="text-[#02023D] font-extrabold text-[14px]">Entrar</Text>
+          </Pressable>
+        ) : (
+          <View className="w-8" />
+        )}
       </View>
 
       {/* Search Bar */}
@@ -103,89 +109,106 @@ export function PopularesPreviewScreen({
           />
         </Pressable>
 
-        {/* Action Buttons: Entrar e Jogar & Criar Conta */}
-        <View style={{ flexDirection: 'row', paddingHorizontal: 10, marginTop: 15, justifyContent: 'center', gap: 10 }}>
-          {/* Entrar e Jogar (Glass Gradient) */}
-          <Pressable 
-            onPress={onDirectLogin}
-            style={({ pressed }) => ({
-              flex: 1,
-              borderRadius: 4,
-              overflow: 'hidden',
-              opacity: pressed ? 0.9 : 1,
-            })}
-          >
-            <LinearGradient
-              colors={['#000000', '#0505A3']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={{
-                height: 34,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 4,
-              }}
+        {/* Action Buttons / Play Button Conditional */}
+        {!isLoggedIn ? (
+          <View style={{ flexDirection: 'row', paddingHorizontal: 16, marginTop: 15, justifyContent: 'center', gap: 12 }}>
+            {/* Entrar e Jogar (Solid Dark Gradient) */}
+            <Pressable
+              onPress={onDirectLogin}
+              style={({ pressed }) => ({
+                flex: 1,
+                borderRadius: 6,
+                overflow: 'hidden',
+                opacity: pressed ? 0.9 : 1,
+              })}
             >
-              {/* Glass Overlay Effect */}
-              <View 
+              <LinearGradient
+                colors={['#000000', '#07008C']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
                 style={{
-                  ...StyleSheet.absoluteFillObject,
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                  borderWidth: 1,
-                  borderColor: 'rgba(255, 255, 255, 0.15)',
-                  borderRadius: 4,
-                }} 
-              />
-              <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13, textAlign: 'center' }}>Entrar e Jogar</Text>
-            </LinearGradient>
-          </Pressable>
-
-          {/* Criar Conta (Green with Shadow) */}
-          <Pressable 
-            onPress={onDirectRegister}
-            style={({ pressed }) => ({
-              flex: 1,
-              backgroundColor: '#17C900',
-              height: 34,
-              borderRadius: 4,
-              alignItems: 'center',
-              justifyContent: 'center',
-              opacity: pressed ? 0.9 : 1,
-              // Shadow for iOS
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.3,
-              shadowRadius: 4,
-              // Shadow for Android
-              elevation: 4,
-            })}
-          >
-            <View
-              style={{
-                backgroundColor: '#17C900',
-                height: 34,
-                borderRadius: 4,
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '100%'
-              }}
-            >
-              <Text 
-                style={{ 
-                  color: 'white', 
-                  fontWeight: 'bold', 
-                  fontSize: 13,
-                  textAlign: 'center',
-                  textShadowColor: 'rgba(0, 0, 0, 0.5)',
-                  textShadowOffset: { width: 1, height: 1 },
-                  textShadowRadius: 3
+                  height: 42,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 6,
                 }}
               >
-                Criar Conta
-              </Text>
-            </View>
-          </Pressable>
-        </View>
+                <Text style={{ color: 'white', fontWeight: '900', fontSize: 15, textAlign: 'center' }}>Entrar e Jogar</Text>
+              </LinearGradient>
+            </Pressable>
+
+            {/* Criar Conta (Solid Green) */}
+            <Pressable
+              onPress={onDirectRegister}
+              style={({ pressed }) => ({
+                flex: 1,
+                borderRadius: 6,
+                opacity: pressed ? 0.9 : 1,
+              })}
+            >
+              <View
+                style={{
+                  backgroundColor: '#17C900',
+                  height: 42,
+                  borderRadius: 6,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '100%',
+                }}
+              >
+                <Text
+                  style={{
+                    color: 'white',
+                    fontWeight: '900',
+                    fontSize: 15,
+                    textAlign: 'center',
+                    textShadowColor: 'rgba(0, 0, 0, 0.25)',
+                    textShadowOffset: { width: 0, height: 1 },
+                    textShadowRadius: 2
+                  }}
+                >
+                  Criar Conta
+                </Text>
+              </View>
+            </Pressable>
+          </View>
+        ) : (
+          <View style={{ paddingHorizontal: 16, marginTop: 15 }}>
+            <Pressable
+              style={({ pressed }) => ({
+                borderRadius: 8,
+                opacity: pressed ? 0.9 : 1,
+                width: '100%',
+              })}
+            >
+              <View
+                style={{
+                  backgroundColor: '#17C900',
+                  height: 48,
+                  borderRadius: 8,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '100%',
+                }}
+              >
+                <Text
+                  style={{
+                    color: 'white',
+                    fontWeight: '900',
+                    fontSize: 16,
+                    textAlign: 'center',
+                    textShadowColor: 'rgba(0, 0, 0, 0.25)',
+                    textShadowOffset: { width: 0, height: 1 },
+                    textShadowRadius: 2,
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  Jogar
+                </Text>
+              </View>
+            </Pressable>
+          </View>
+        )}
 
         {/* Divider */}
         <View style={{ marginHorizontal: 16, marginTop: 20, height: 1, backgroundColor: 'rgba(255,255,255,0.15)' }} />
@@ -324,21 +347,24 @@ export function PopularesPreviewScreen({
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 20, paddingHorizontal: 16 }}>
           <View style={{ flex: 1, height: 1, backgroundColor: 'rgba(255,255,255,0.1)' }} />
           <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18, marginHorizontal: 15 }}>
-            Desbloqueie Jogos Exclusivos!
+            {isLoggedIn ? 'Jogos Onlines' : 'Desbloqueie Jogos Exclusivos!'}
           </Text>
           <View style={{ flex: 1, height: 1, backgroundColor: 'rgba(255,255,255,0.1)' }} />
         </View>
 
-        {/* Exclusive Games Image */}
+        {/* Games Image */}
         <View style={{ alignItems: 'center', marginTop: 10, paddingHorizontal: 16 }}>
           <Image
-            source={require('../../assets/populares/bloqueados.png')}
+            source={isLoggedIn
+              ? require('../../assets/populares/desbloqueados.png')
+              : require('../../assets/populares/bloqueados.png')
+            }
             style={{ width: '100%', height: 220 }}
             resizeMode="contain"
           />
         </View>
 
-        {/* Unlock Button Section */}
+        {/* Button Section */}
         <View style={{ paddingHorizontal: 20, marginTop: 16, alignItems: 'center', marginBottom: 30 }}>
           <Pressable
             style={{
@@ -351,10 +377,12 @@ export function PopularesPreviewScreen({
             }}
             onPress={onLoginClick}
           >
-            <Text style={{ color: '#02023D', fontWeight: 'bold', fontSize: 18 }}>Desbloquear</Text>
+            <Text style={{ color: '#02023D', fontWeight: 'bold', fontSize: 18 }}>
+              {isLoggedIn ? 'Mostrar Mais' : 'Desbloquear'}
+            </Text>
           </Pressable>
           <Text style={{ color: 'white', fontWeight: '500', fontSize: 13, marginTop: 8 }}>
-            Desbloquear mais de 2889 jogos
+            {isLoggedIn ? 'Mostrar 30 de 2886 Jogos' : 'Desbloquear mais de 2889 jogos'}
           </Text>
         </View>
       </ScrollView>

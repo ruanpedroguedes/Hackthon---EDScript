@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, ScrollView, Image, StatusBar } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { LoadingOverlay } from '../components/LoadingOverlay';
 
 interface LoginScreenProps {
   onBack: () => void;
@@ -15,6 +16,16 @@ export function LoginScreen({ onBack, onRegisterClick, onLogin }: LoginScreenPro
     senha: '',
   });
   const [stayConnected, setStayConnected] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLoginSubmit = () => {
+    setIsLoading(true);
+    // Simulating 2 seconds loading for backend auth
+    setTimeout(() => {
+      setIsLoading(false);
+      onLogin();
+    }, 2000);
+  };
 
   const InputField = ({ label, placeholder, value, onChangeText, secureTextEntry = false }: any) => (
     <View className="mb-3">
@@ -35,6 +46,7 @@ export function LoginScreen({ onBack, onRegisterClick, onLogin }: LoginScreenPro
   return (
     <View className="flex-1 bg-[#02023D]" style={{ flex: 1, backgroundColor: '#02023D' }}>
       <StatusBar barStyle="light-content" />
+      <LoadingOverlay visible={isLoading} />
       
       {/* Header */}
       <View className="flex-row items-center justify-between px-4 pt-10 pb-3">
@@ -62,31 +74,11 @@ export function LoginScreen({ onBack, onRegisterClick, onLogin }: LoginScreenPro
         
         {/* Banner */}
         <View className="px-4 mt-2">
-          <LinearGradient
-            colors={['#000000', '#0007C9']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0.5 }}
-            className="rounded-[25px] overflow-hidden p-6 flex-row"
-            style={{ minHeight: 180 }}
-          >
-            <View className="flex-1 justify-center z-10">
-              <Image 
-                source={require('../../assets/logos/bemvindo.png')} 
-                className="w-48 h-12 mb-4" 
-                resizeMode="contain" 
-              />
-              <Text className="text-white font-black italic text-[14px] leading-[20px]">
-                Você sabia que está rolando torneio e desafios com recompensas em coins para você trocar por rodadas na loja?
-              </Text>
-            </View>
-            <View className="absolute right-[-20px] bottom-[-10px] w-[180px] h-[180px]">
-               <Image 
-                source={require('../../assets/logos/fotogeniologin.png')} 
-                className="w-full h-full" 
-                resizeMode="contain" 
-              />
-            </View>
-          </LinearGradient>
+          <Image
+            source={require('../../assets/login/login.png')}
+            style={{ width: '100%', height: 170, borderRadius: 25 }}
+            resizeMode="cover"
+          />
         </View>
 
         {/* Form Title */}
@@ -133,7 +125,7 @@ export function LoginScreen({ onBack, onRegisterClick, onLogin }: LoginScreenPro
         {/* Login Button */}
         <View className="px-4 mt-8">
           <Pressable 
-            onPress={onLogin}
+            onPress={handleLoginSubmit}
             className="bg-[#17C900] py-4 rounded-[15px] items-center active:opacity-80"
           >
             <Text className="text-black font-black text-lg uppercase">Entrar</Text>

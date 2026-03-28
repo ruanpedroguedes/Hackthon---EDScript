@@ -13,6 +13,7 @@ import { BottomNav } from './src/components/BottomNav';
 import { HomePreviewScreen } from './src/screens/HomePreviewScreen';
 import { PreferenceSelectionScreen } from './src/screens/PreferenceSelectionScreen';
 import BetRecommendationScreen from './src/screens/BetRecommendationScreen';
+import { EsportesScreen } from './src/screens/EsportesScreen';
 
 export default function App() {
   const [showPreview, setShowPreview] = useState(true);
@@ -87,8 +88,33 @@ export default function App() {
     );
   }
 
+  if (homeScreen === 'Esportes') {
+    return (
+      <EsportesScreen 
+        onBack={() => {
+          setHasSelectedPreference(false);
+        }}
+        onTabChange={(tab) => {
+          setActiveTab(tab);
+          if (tab === 'Home') setHomeScreen('Home');
+          else if (tab === 'Cassino') setHomeScreen('Cassino');
+          else if (tab === 'Populares') setHomeScreen('Populares');
+        }}
+      />
+    );
+  }
+
   return (
-    <HomePreviewScreen isLoggedIn={true} initialTab={homeScreen} />
+    <HomePreviewScreen 
+      isLoggedIn={true} 
+      initialTab={homeScreen}
+      onTabChange={(tab) => {
+        setActiveTab(tab);
+        if (tab === 'Esportes') setHomeScreen('Esportes');
+        else if (tab === 'Cassino') setHomeScreen('Cassino');
+        else if (tab === 'Populares') setHomeScreen('Populares');
+      }}
+    />
   );
 }
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Pressable, Image, StatusBar, Dimensions, FlatList, NativeScrollEvent, NativeSyntheticEvent, ScrollView, Animated } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { Feather, Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import MaskedView from '@react-native-masked-view/masked-view';
@@ -11,6 +11,7 @@ import { PopularesPreviewScreen } from './PopularesPreviewScreen';
 import { CasinoHomeScreen } from './CasinoHomeScreen';
 import { SoccerScreen } from './SoccerScreen';
 import BetRecommendationScreen from './BetRecommendationScreen';
+import { CassinoPreviewScreen } from './CassinoPreviewScreen';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = width * 0.85;
@@ -55,15 +56,25 @@ export function HomePreviewScreen({
   onDirectLogin = () => {},
   onDirectRegister = () => {},
   isLoggedIn = false,
-  initialTab = 'Home'
+  initialTab = 'Home',
+  onTabChange,
 }: { 
   onLoginClick?: () => void;
   onDirectLogin?: () => void;
   onDirectRegister?: () => void;
   isLoggedIn?: boolean;
   initialTab?: string;
+  onTabChange?: (tab: string) => void;
 }) {
   const [activeTab, setActiveTab] = useState(initialTab);
+
+  const handleTabChange = (tab: string) => {
+    if (onTabChange && (tab === 'Esportes' || tab === 'Cassino' || tab === 'Populares')) {
+      onTabChange(tab);
+      return;
+    }
+    setActiveTab(tab);
+  };
   const [activeIndex, setActiveIndex] = useState(0);
   const [gamesIndex, setGamesIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
@@ -75,6 +86,14 @@ export function HomePreviewScreen({
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [showBetModal, setShowBetModal] = useState(false);
   const tabOpacity = useRef(new Animated.Value(0)).current;
+
+  const handleOddClick = () => {
+    if (isLoggedIn) {
+      setShowBetModal(true);
+    } else {
+      onLoginClick();
+    }
+  };
 
   const previewPlayer = useVideoPlayer(require('../../assets/videos/video1.mp4'), (p) => {
     p.loop = true;
@@ -190,13 +209,15 @@ export function HomePreviewScreen({
               resizeMode="contain"
             />
 
-            {!isLoggedIn && (
+            {!isLoggedIn ? (
               <Pressable
                 className="bg-white px-4 py-1.5 rounded-[20px] active:opacity-80"
                 onPress={() => onLoginClick()}
               >
                 <Text className="text-[#242424] font-bold text-[13px]">Entrar</Text>
               </Pressable>
+            ) : (
+              <View className="w-8" />
             )}
           </View>
 
@@ -317,58 +338,72 @@ export function HomePreviewScreen({
               </Pressable>
 
               {/* Right: Winner Card */}
-              <LinearGradient
-                colors={['#000000', '#0007C9']}
-                style={{ borderRadius: 14 }}
-                className="flex-1 h-full px-4 pt-3 pb-2 border border-white/10 justify-between"
-              >
+              <View className="flex-1 h-full shadow-lg">
+                <LinearGradient
+                  colors={['#000000', '#03034A']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={{ borderRadius: 16, width: '100%', height: '100%' }}
+                  className="px-3 py-4 justify-between border border-white/20 overflow-hidden"
+                >
+                {/* Glass overlay subtle effect */}
+                <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(255, 255, 255, 0.05)' }} />
+
                 {/* Header + Prize */}
-                <View className="items-center">
-                  <View className="flex-row items-center justify-center w-full mb-2">
-                    <Feather name="zap" size={15} color="white" style={{ marginRight: 6 }} />
-                    <Text className="text-white font-bold text-[13px] text-center">
+                <View className="items-center z-10 w-full shrink">
+                  <View className="flex-row items-center justify-center mb-1">
+                    <Feather name="zap" size={17} color="white" style={{ marginRight: 6 }} />
+                    <Text className="text-white font-bold text-[13px]" numberOfLines={1} adjustsFontSizeToFit>
                       Alguém acabou de ganhar
                     </Text>
                   </View>
-                  <View className="flex-row items-end justify-center">
-                    <Text className="text-[#00FF00] font-bold text-[14px] mr-1 mb-0.5">R$</Text>
-                    <Text className="text-[#00FF00] font-bold text-[26px] tracking-tighter" numberOfLines={1}>100.000.000</Text>
+                  
+                  <View className="flex-row items-baseline justify-center w-full overflow-hidden">
+                    <Text className="text-[#17C900] font-bold text-[18px] mr-1">R$</Text>
+                    <Text className="text-[#17C900] font-black text-[34px] tracking-tight shrink" numberOfLines={1} adjustsFontSizeToFit>
+                      100.000
+                    </Text>
                   </View>
                 </View>
 
                 {/* Separator */}
-                <View className="w-full h-[1.5px] bg-white/30 my-1" />
-                
+                <View className="w-full h-[1px] bg-white/20 mt-0.5 mb-2 z-10" />
+
                 {/* Info Section */}
-                <View className="w-full">
-                  <View className="flex-row items-center mb-2">
-                    <Text className="text-white text-[12px] font-bold">No Bac-Bo</Text>
-                    <View className="ml-2 bg-[#17C900] w-4 h-4 rounded-sm flex-row flex-wrap p-[2px] justify-between">
-                       <View className="w-[4px] h-[4px] bg-black rounded-full" />
-                       <View className="w-[4px] h-[4px] bg-black rounded-full" />
-                       <View className="w-[4px] h-[4px] bg-black rounded-full" />
-                       <View className="w-[4px] h-[4px] bg-black rounded-full" />
-                    </View>
+                <View className="w-full z-10">
+                  <View className="flex-row items-center mb-1.5">
+                    <Text className="text-white text-[14px] font-bold tracking-tight">No Bac-Bo</Text>
+                    <Ionicons name="dice" size={17} color="#17C900" style={{ marginLeft: 6 }} />
                   </View>
                   
-                  <View className="flex-row items-center mb-2">
-                    <Image source={require('../../assets/icons/chat_homepreview.png')} className="w-4 h-4 mr-2" resizeMode="contain" />
-                    <Text className="text-white text-[12px] font-bold">User23156 sacou há 5 min</Text>
+                  <View className="flex-row items-center mb-1.5">
+                    <Ionicons name="chatbubble-ellipses" size={15} color="white" style={{ marginRight: 6 }} />
+                    <Text className="text-white text-[13px] font-bold" numberOfLines={1} adjustsFontSizeToFit>User23156 sacou há 5 min</Text>
                   </View>
 
-                  <Text className="text-white text-[11px]">
-                    Já pagamos <Text className="font-bold">R$242.000.000</Text> hoje
+                  <Text className="text-white text-[13px] font-bold" numberOfLines={1} adjustsFontSizeToFit>
+                    Já pagamos R$242.000.000 hoje
                   </Text>
                 </View>
 
                 {/* Action Button */}
-                <Pressable
-                  className="bg-white w-full py-3 rounded-full items-center justify-center active:bg-gray-200 mt-2"
-                  onPress={() => onLoginClick()}
-                >
-                  <Text className="text-black font-black text-[13px]">QUERO TENTAR AGORA</Text>
-                </Pressable>
-              </LinearGradient>
+                <View className="items-center w-full mt-2 z-10">
+                  <Pressable
+                    className="bg-white px-5 py-2.5 rounded-full items-center justify-center active:opacity-80 w-[95%]"
+                    style={{
+                      shadowColor: '#000',
+                      shadowOffset: { width: 0, height: 4 },
+                      shadowOpacity: 0.4,
+                      shadowRadius: 5,
+                      elevation: 5,
+                    }}
+                    onPress={() => onLoginClick()}
+                  >
+                    <Text className="text-[#000] font-black text-[12px] tracking-wide" numberOfLines={1} adjustsFontSizeToFit>QUERO TENTAR AGORA</Text>
+                  </Pressable>
+                </View>
+                </LinearGradient>
+              </View>
             </View>
 
             {/* Jogos em Alta Section */}
@@ -448,7 +483,7 @@ export function HomePreviewScreen({
                     <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13, marginBottom: 8, textAlign: 'center' }}>Casa</Text>
                     <Pressable
                       className="bg-white/10 px-4 py-2 rounded-lg active:opacity-70"
-                      onPress={() => isLoggedIn ? setShowBetModal(true) : onLoginClick()}
+                      onPress={handleOddClick}
                     >
                       <Text className="text-white font-bold">1.80</Text>
                     </Pressable>
@@ -463,7 +498,7 @@ export function HomePreviewScreen({
                     <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13, marginBottom: 8, textAlign: 'center' }}>Empate</Text>
                     <Pressable
                       className="bg-white/10 px-4 py-2 rounded-lg active:opacity-70"
-                      onPress={() => isLoggedIn ? setShowBetModal(true) : onLoginClick()}
+                      onPress={handleOddClick}
                     >
                       <Text className="text-white font-bold">2.34</Text>
                     </Pressable>
@@ -482,7 +517,7 @@ export function HomePreviewScreen({
                     <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13, marginBottom: 8, textAlign: 'center' }}>Fora</Text>
                     <Pressable
                       className="bg-white/10 px-4 py-2 rounded-lg active:opacity-70"
-                      onPress={() => isLoggedIn ? setShowBetModal(true) : onLoginClick()}
+                      onPress={handleOddClick}
                     >
                       <Text className="text-white font-bold">2.85</Text>
                     </Pressable>
@@ -633,7 +668,7 @@ export function HomePreviewScreen({
 
                         {/* Bottom Odd Box - Glass White */}
                         <Pressable
-                          onPress={onLoginClick}
+                          onPress={handleOddClick}
                           className="bg-white/10 rounded-xl py-2 items-center justify-center border border-white/20 active:opacity-80"
                         >
                           <Text className="text-white font-bold text-[18px] leading-tight">{data.odd}</Text>
@@ -662,6 +697,15 @@ export function HomePreviewScreen({
           onDirectLogin={onDirectLogin}
           onDirectRegister={onDirectRegister}
           onMenuClick={() => setIsMenuVisible(true)} 
+          isLoggedIn={isLoggedIn}
+        />
+      ) : activeTab === 'Cassino' ? (
+        <CassinoPreviewScreen
+          onLoginClick={onLoginClick}
+          onDirectLogin={onDirectLogin}
+          onDirectRegister={onDirectRegister}
+          onMenuClick={() => setIsMenuVisible(true)}
+          isLoggedIn={isLoggedIn}
         />
       ) : activeTab === 'Cassino' ? (
         <CasinoHomeScreen />
@@ -671,7 +715,7 @@ export function HomePreviewScreen({
           onBetSelected={() => isLoggedIn ? setShowBetModal(true) : onLoginClick()}
         />
       ) : (
-        /* Fallback for other tabs like Cassino, Esportes for now */
+        /* Fallback for other tabs like Esportes for now */
         <View className="flex-1 items-center justify-center">
           <Text className="text-white text-lg">Work in Progress</Text>
           <Pressable 
@@ -684,8 +728,15 @@ export function HomePreviewScreen({
       )}
       </Animated.View>
 
-      <BetRecommendationScreen visible={showBetModal} onBack={() => setShowBetModal(false)} />
-      <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
+      <BottomNav activeTab={activeTab} setActiveTab={handleTabChange} />
+
+      {/* Bet Recommendation Modal */}
+      {showBetModal && (
+        <BetRecommendationScreen
+          visible={showBetModal}
+          onBack={() => setShowBetModal(false)}
+        />
+      )}
     </View>
   );
 }
