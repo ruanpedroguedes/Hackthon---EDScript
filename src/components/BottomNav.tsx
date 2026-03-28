@@ -104,7 +104,7 @@ export function BottomNav({ activeTab, setActiveTab }: BottomNavProps) {
         <View className="items-center w-16 relative">
           <Pressable 
             onPress={() => setActiveTab('Suporte')}
-            style={{ position: 'absolute', top: -65, zIndex: 100, alignItems: 'center' }}
+            style={{ position: 'absolute', top: -80, zIndex: 100, alignItems: 'center' }}
           >
             <LinearGradient
               colors={['#0007C9', '#02023D']}
